@@ -124,12 +124,14 @@
         }
 
         .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            max-width: 1000px;
+            display: grid;
+            grid-template-columns: minmax(420px, 560px) minmax(0, 1fr);
+            align-items: stretch;
+            align-content: center;
+            gap: 64px;
+            max-width: 1680px;
             margin: 0 auto;
-            padding: 30px;
+            padding: 48px 40px;
             min-height: 100vh;
             position: relative;
             z-index: 10;
@@ -153,8 +155,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            margin-bottom: 60px;
+            justify-content: flex-start;
+            margin-bottom: 0;
             position: relative;
         }
 
@@ -172,8 +174,8 @@
         }
 
         .app-title {
-            font-size: 2.5rem;
-            margin-bottom: 40px;
+            font-size: 3.1rem;
+            margin-bottom: 36px;
             text-shadow: var(--pixel-shadow-large);
             animation: float 3s ease-in-out infinite, glow 2s ease-in-out infinite alternate;
             background: linear-gradient(45deg, var(--primary-red), var(--primary-yellow), var(--primary-red));
@@ -205,64 +207,45 @@
             100% { filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6)); }
         }
 
-        .mode-badge {
-            background: linear-gradient(135deg, var(--primary-yellow), var(--secondary-yellow));
+        .current-task-display {
+            display: none;
+            max-width: 760px;
+            margin: 0 20px 44px;
+            padding: 18px 36px;
+            border: 4px solid var(--dark-gray);
+            background: var(--primary-yellow);
+            box-shadow: var(--pixel-shadow);
             color: var(--dark-gray);
-            padding: 15px 30px;
-            border-radius: 0;
-            font-size: 0.9rem;
-            margin-bottom: 50px;
-            box-shadow: var(--pixel-shadow-large);
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            border: 3px solid var(--dark-gray);
-            position: relative;
-            overflow: hidden;
-            font-weight: bold;
-            animation: badgePulse 2s ease-in-out infinite;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            text-align: center;
+            line-height: 1.7;
+            word-break: break-word;
         }
 
-        .mode-badge::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            animation: shine 3s infinite;
+        .current-task-display.is-visible {
+            display: block;
         }
 
-        @keyframes shine {
-            0% { left: -100%; }
-            50% { left: 100%; }
-            100% { left: 100%; }
-        }
-
-        @keyframes badgePulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .work-mode .mode-badge {
-            background: linear-gradient(135deg, var(--pure-white), var(--light-gray));
-            color: var(--primary-red);
+        .work-mode .current-task-display {
+            background: var(--pure-white);
             border-color: var(--pure-white);
+            color: var(--primary-red);
             box-shadow: var(--glow-white);
         }
 
         .timer-wrapper {
             position: relative;
-            margin-bottom: 60px;
+            margin-bottom: 48px;
         }
 
         .timer-display {
             font-family: 'Orbitron', 'Press Start 2P', monospace;
-            font-size: 6rem;
+            font-size: 6.6rem;
             font-weight: 900;
             background: linear-gradient(135deg, var(--pure-white) 0%, var(--light-gray) 100%);
             color: var(--primary-red);
-            padding: 50px 80px;
+            padding: 56px 84px;
             border-radius: 0;
             box-shadow: 
                 var(--pixel-shadow-large),
@@ -271,7 +254,7 @@
             text-shadow: 
                 2px 2px 0px rgba(0,0,0,0.3),
                 0 0 10px rgba(255, 45, 45, 0.5);
-            letter-spacing: 12px;
+            letter-spacing: 16px;
             border: 5px solid var(--dark-gray);
             position: relative;
             overflow: hidden;
@@ -368,116 +351,19 @@
             background-size: 400% 400%;
         }
 
-        /* 精美像素风格进度条 */
-        .progress-bar {
-            width: 500px;
-            height: 30px;
-            background: linear-gradient(135deg, rgba(0,0,0,0.2), rgba(0,0,0,0.4));
-            border: 4px solid currentColor;
-            margin: 40px 0;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 
-                var(--pixel-shadow),
-                inset 0 0 20px rgba(0,0,0,0.3);
-        }
-
-        .progress-bar::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: repeating-linear-gradient(
-                45deg,
-                transparent 0px,
-                transparent 3px,
-                rgba(255,255,255,0.1) 3px,
-                rgba(255,255,255,0.1) 6px
-            );
-            pointer-events: none;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                currentColor 0%,
-                rgba(255,255,255,0.9) 50%,
-                currentColor 100%
-            );
-            width: 0%;
-            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            box-shadow: 0 0 15px currentColor;
-            animation: progressPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes progressPulse {
-            0%, 100% { 
-                box-shadow: 0 0 15px currentColor;
-                filter: brightness(1);
-            }
-            50% { 
-                box-shadow: 0 0 25px currentColor;
-                filter: brightness(1.2);
-            }
-        }
-
-        .progress-fill::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: repeating-linear-gradient(
-                90deg,
-                transparent 0px,
-                transparent 8px,
-                rgba(255,255,255,0.4) 8px,
-                rgba(255,255,255,0.4) 12px,
-                transparent 12px,
-                transparent 20px
-            );
-            animation: progressFlow 2s linear infinite;
-        }
-
-        .progress-fill::after {
-            content: '';
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            right: 2px;
-            bottom: 2px;
-            background: linear-gradient(
-                to right,
-                rgba(255,255,255,0.3),
-                transparent 30%,
-                transparent 70%,
-                rgba(255,255,255,0.3)
-            );
-        }
-
-        @keyframes progressFlow {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
         /* 精美控制按钮 */
         .controls {
             display: flex;
-            gap: 25px;
+            gap: 32px;
             flex-wrap: wrap;
             justify-content: center;
         }
 
         .pixel-btn {
             font-family: 'Press Start 2P', cursive;
-            font-size: 1rem;
+            font-size: 1.15rem;
             font-weight: bold;
-            padding: 18px 35px;
+            padding: 22px 42px;
             border: none;
             border-radius: 0;
             cursor: pointer;
@@ -672,7 +558,9 @@
         /* 任务区域 */
         .task-section {
             width: 100%;
-            max-width: 600px;
+            max-width: none;
+            display: flex;
+            flex-direction: column;
             background: 
                 linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,248,248,0.95) 100%);
             backdrop-filter: blur(20px);
@@ -681,10 +569,17 @@
                 var(--pixel-shadow-large),
                 0 0 30px rgba(0,0,0,0.1),
                 inset 0 0 30px rgba(255,255,255,0.1);
-            padding: 35px;
+            padding: 36px;
             color: var(--dark-gray);
             position: relative;
             overflow: hidden;
+            min-height: 0;
+        }
+
+        #taskList {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
         }
 
         .task-section::before {
@@ -738,8 +633,8 @@
         }
 
         .section-header {
-            font-size: 1.1rem;
-            margin-bottom: 25px;
+            font-size: 1.35rem;
+            margin-bottom: 28px;
             color: var(--primary-red);
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -774,17 +669,17 @@
         /* 任务列表 */
         .task-input-group {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 12px;
+            margin-bottom: 24px;
         }
 
         .pixel-input {
             font-family: 'Press Start 2P', cursive;
             flex: 1;
-            padding: 12px;
+            padding: 16px;
             border: 3px solid var(--dark-gray);
             background: var(--pure-white);
-            font-size: 0.7rem;
+            font-size: 0.85rem;
             color: var(--dark-gray);
         }
 
@@ -797,12 +692,13 @@
         .task-item {
             background: var(--light-gray);
             border: 2px solid var(--dark-gray);
-            padding: 15px;
-            margin-bottom: 10px;
+            padding: 18px;
+            margin-bottom: 14px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
 
         .task-item.current {
@@ -811,8 +707,17 @@
             box-shadow: var(--pixel-shadow-small);
         }
 
+        .task-item.completed {
+            opacity: 0.55;
+            cursor: default;
+        }
+
+        .task-item.completed .task-text {
+            text-decoration: line-through;
+        }
+
         .task-text {
-            font-size: 0.7rem;
+            font-size: 0.85rem;
             flex: 1;
             text-align: left;
         }
@@ -823,8 +728,8 @@
         }
 
         .mini-btn {
-            width: 30px;
-            height: 30px;
+            width: 36px;
+            height: 36px;
             border: 2px solid var(--dark-gray);
             background: var(--pure-white);
             cursor: pointer;
@@ -839,7 +744,48 @@
             background: var(--primary-yellow);
         }
 
+        .app-toast {
+            position: fixed;
+            top: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+            align-items: center;
+            gap: 16px;
+            z-index: 2000;
+            background: var(--primary-yellow);
+            color: var(--dark-gray);
+            border: 4px solid var(--dark-gray);
+            box-shadow: var(--pixel-shadow-large);
+            padding: 16px 18px 16px 24px;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            line-height: 1.6;
+            max-width: calc(100vw - 40px);
+        }
 
+        .app-toast.is-visible {
+            display: flex;
+            animation: toastIn 0.2s ease-out;
+        }
+
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        .work-mode .app-toast {
+            background: var(--pure-white);
+            border-color: var(--pure-white);
+            color: var(--primary-red);
+        }
 
         /* 设置模态框 */
         .settings-modal {
@@ -918,55 +864,58 @@
             font-size: 0.8rem;
         }
 
-        /* 通知横幅 */
-        .notification-banner {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--primary-yellow);
-            border: 3px solid var(--dark-gray);
-            padding: 15px 25px;
-            box-shadow: var(--pixel-shadow);
-            z-index: 999;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: none;
-        }
-
         /* 精美响应式设计 */
-        @media (max-width: 1200px) {
+        @media (max-width: 1280px) {
             .container {
-                grid-template-columns: 1fr;
+                grid-template-columns: minmax(360px, 460px) minmax(0, 1fr);
                 gap: 40px;
-                max-width: 900px;
+                padding: 36px 24px;
             }
 
-            .sidebar {
-                width: 100%;
-                order: -1;
+            .timer-display {
+                font-size: 5.2rem;
+                padding: 44px 56px;
+                letter-spacing: 12px;
+            }
+
+            .app-title {
+                font-size: 2.4rem;
+            }
+        }
+
+        @media (max-width: 860px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 28px;
+                max-width: 720px;
+            }
+
+            .task-section {
+                order: 2;
             }
 
             .main-timer {
-                min-height: 70vh;
+                order: 1;
+                min-height: auto;
             }
         }
 
         @media (max-width: 768px) {
             .app-title {
-                font-size: 2rem;
-                margin-bottom: 30px;
+                font-size: 1.8rem;
+                margin-bottom: 22px;
+            }
+
+            .current-task-display {
+                font-size: 0.65rem;
+                padding: 12px 18px;
+                margin-bottom: 28px;
             }
 
             .timer-display {
-                font-size: 4.5rem;
-                padding: 40px 50px;
+                font-size: 3.6rem;
+                padding: 32px 28px;
                 letter-spacing: 8px;
-            }
-
-            .progress-bar {
-                width: 400px;
             }
 
             .controls {
@@ -976,15 +925,6 @@
             .pixel-btn {
                 font-size: 0.9rem;
                 padding: 15px 28px;
-            }
-
-            .sidebar {
-                padding: 30px;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 15px;
             }
 
             .container {
@@ -1002,11 +942,6 @@
                 font-size: 3.5rem;
                 padding: 30px 40px;
                 letter-spacing: 6px;
-            }
-
-            .progress-bar {
-                width: 300px;
-                height: 25px;
             }
 
             .pixel-btn {
@@ -1037,10 +972,6 @@
                 gap: 25px;
             }
 
-            .sidebar {
-                padding: 25px;
-            }
-
             .settings-trigger {
                 width: 60px;
                 height: 60px;
@@ -1057,11 +988,6 @@
                 letter-spacing: 4px;
             }
 
-            .progress-bar {
-                width: 250px;
-                height: 20px;
-            }
-
             .pixel-btn {
                 font-size: 0.7rem;
                 padding: 10px 15px;
@@ -1069,11 +995,6 @@
 
             .app-title {
                 font-size: 1.4rem;
-            }
-
-            .mode-badge {
-                font-size: 0.7rem;
-                padding: 12px 20px;
             }
         }
 
@@ -1155,41 +1076,36 @@
     <!-- 设置按钮 -->
     <div class="settings-trigger" onclick="toggleSettings()">⚙</div>
 
-    <!-- 通知横幅 -->
-    <div id="notificationBanner" class="notification-banner">
-        <span>🔔 点击启用桌面通知获得更好体验</span>
-        <button class="mini-btn" onclick="requestNotificationPermission()" style="margin-left: 15px;">启用</button>
+    <div class="app-toast" id="appToast" role="status">
+        <span id="appToastText">Another task in progress.</span>
+        <button class="mini-btn" type="button" onclick="pomodoro.hideToast()" title="Close">✕</button>
     </div>
 
     <div class="container">
+        <!-- 任务区域 -->
+        <div class="task-section">
+            <div class="section-header">📋 TO DO</div>
+            <div class="task-input-group">
+                <input type="text" class="pixel-input" id="taskInput" placeholder="Add new task...">
+                <button class="pixel-btn btn-secondary" onclick="addTask()" style="padding: 16px 18px;">+</button>
+            </div>
+            <div id="taskList"></div>
+        </div>
+
         <!-- 主计时器区域 -->
         <div class="main-timer">
             <h1 class="app-title">🍅 TOMATO CLOCK🍅</h1>
-            
-            <div class="mode-badge" id="modeBadge">🎯 FOCUS TIME</div>
+            <div class="current-task-display" id="currentTaskDisplay"></div>
             
             <div class="timer-wrapper">
                 <div class="timer-display" id="timerDisplay">25:00</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
             </div>
 
             <div class="controls">
                 <button class="pixel-btn btn-primary" id="startPauseBtn" onclick="toggleTimer()">START</button>
                 <button class="pixel-btn btn-secondary" onclick="resetTimer()">STOP</button>
-                <button class="pixel-btn btn-tertiary" onclick="skipTimer()">RESET</button>
+                <button class="pixel-btn btn-tertiary" onclick="skipTimer()">SKIP</button>
             </div>
-        </div>
-
-        <!-- 任务区域 -->
-        <div class="task-section slide-in">
-            <div class="section-header">📋 TO DO</div>
-            <div class="task-input-group">
-                <input type="text" class="pixel-input" id="taskInput" placeholder="Add new task...">
-                <button class="pixel-btn btn-secondary" onclick="addTask()" style="padding: 12px 15px;">+</button>
-            </div>
-            <div id="taskList"></div>
         </div>
     </div>
 
@@ -1268,11 +1184,13 @@
                     shortBreakDuration: 5,
                     longBreakDuration: 15,
                     longBreakInterval: 4,
-                    autoStart: true,
+                    autoStart: false,
                     sound: true
                 };
-                
 
+                this.completedWorkCount = 0;
+                this.autoStartTimeout = null;
+                this.toastTimeout = null;
                 
                 // 任务管理
                 this.tasks = [];
@@ -1285,8 +1203,6 @@
             init() {
                 this.loadData();
                 this.updateDisplay();
-                this.updateProgressBar();
-                this.checkNotificationPermission();
                 this.setupKeyboardShortcuts();
                 this.renderTasks();
             }
@@ -1330,11 +1246,12 @@
             startTimer() {
                 this.isRunning = true;
                 this.isPaused = false;
+                clearInterval(this.timerId);
+                clearTimeout(this.autoStartTimeout);
                 
                 this.timerId = setInterval(() => {
                     this.timeLeft--;
                     this.updateDisplay();
-                    this.updateProgressBar();
                     this.updatePageTitle();
                     
                     if (this.timeLeft <= 0) {
@@ -1350,6 +1267,7 @@
                 this.isRunning = false;
                 this.isPaused = true;
                 clearInterval(this.timerId);
+                clearTimeout(this.autoStartTimeout);
                 
                 document.getElementById('startPauseBtn').textContent = 'START';
                 document.title = '⏸️ TOMATO CLOCK🍅 - PAUSED';
@@ -1359,36 +1277,43 @@
                 this.isRunning = false;
                 this.isPaused = false;
                 clearInterval(this.timerId);
+                clearTimeout(this.autoStartTimeout);
                 
                 this.timeLeft = this.getCurrentDuration() * 60;
                 this.updateDisplay();
-                this.updateProgressBar();
                 
                 document.getElementById('startPauseBtn').textContent = 'START';
                 document.title = '🍅 TOMATO CLOCK🍅 - 像素番茄时钟';
             }
 
             skipTimer() {
-                clearInterval(this.timerId);
-                this.completeTimer();
+                this.completeTimer({ skipped: true });
             }
 
-            completeTimer() {
+            completeTimer({ skipped = false } = {}) {
+                const finishedMode = this.currentMode;
+
                 this.isRunning = false;
+                this.isPaused = false;
                 clearInterval(this.timerId);
+                clearTimeout(this.autoStartTimeout);
                 
-                // 播放提醒
                 this.playAlert();
                 this.showNotification();
                 this.showVisualFeedback();
+
+                if (finishedMode === 'work' && !skipped) {
+                    this.completedWorkCount += 1;
+                    this.completeCurrentTask();
+                }
                 
-                // 切换模式
                 this.switchMode();
                 
-                // 自动开始（如果启用）
                 if (this.config.autoStart) {
-                    setTimeout(() => {
-                        this.startTimer();
+                    this.autoStartTimeout = setTimeout(() => {
+                        if (!this.isRunning) {
+                            this.startTimer();
+                        }
                     }, 3000);
                 }
                 
@@ -1397,16 +1322,18 @@
 
             switchMode() {
                 if (this.currentMode === 'work') {
-                    // 简单的短休息轮换
-                    this.currentMode = 'shortBreak';
+                    const interval = this.config.longBreakInterval || 4;
+                    this.currentMode = (this.completedWorkCount > 0 && this.completedWorkCount % interval === 0)
+                        ? 'longBreak'
+                        : 'shortBreak';
                 } else {
                     this.currentMode = 'work';
                 }
                 
                 this.timeLeft = this.getCurrentDuration() * 60;
                 this.updateDisplay();
-                this.updateProgressBar();
                 this.updateBodyMode();
+                this.updatePageTitle();
                 document.getElementById('startPauseBtn').textContent = 'START';
             }
 
@@ -1426,20 +1353,6 @@
                 const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
                 
                 document.getElementById('timerDisplay').textContent = timeString;
-                
-                // 更新模式徽章
-                const modeTexts = {
-                    'work': '🎯 FOCUS TIME',
-                    'shortBreak': '☕ SHORT BREAK',
-                    'longBreak': '🌴 LONG BREAK'
-                };
-                document.getElementById('modeBadge').textContent = modeTexts[this.currentMode];
-            }
-
-            updateProgressBar() {
-                const totalTime = this.getCurrentDuration() * 60;
-                const progress = ((totalTime - this.timeLeft) / totalTime) * 100;
-                document.getElementById('progressFill').style.width = `${Math.max(0, Math.min(100, progress))}%`;
             }
 
             updateBodyMode() {
@@ -1459,6 +1372,10 @@
                 
                 if (this.isRunning) {
                     document.title = `${modeEmojis[this.currentMode]} ${timeString} - TOMATO CLOCK🍅`;
+                } else if (this.isPaused) {
+                    document.title = '⏸️ TOMATO CLOCK🍅 - PAUSED';
+                } else {
+                    document.title = '🍅 TOMATO CLOCK🍅 - 像素番茄时钟';
                 }
             }
 
@@ -1514,35 +1431,53 @@
                 }, 1500);
             }
 
-            checkNotificationPermission() {
-                if ('Notification' in window && Notification.permission === 'default') {
-                    document.getElementById('notificationBanner').style.display = 'block';
-                }
-            }
-
-            requestNotificationPermission() {
-                if ('Notification' in window) {
-                    Notification.requestPermission().then(permission => {
-                        if (permission === 'granted') {
-                            document.getElementById('notificationBanner').style.display = 'none';
-                        }
-                    });
-                }
-            }
-
             // 任务管理
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            getCurrentTask() {
+                return this.tasks.find(task => task.id === this.currentTaskId && !task.completed) || null;
+            }
+
+            getNextIncompleteTask() {
+                return this.tasks.find(task => !task.completed) || null;
+            }
+
+            setActiveTask(id) {
+                this.tasks.forEach(task => {
+                    task.isCurrent = task.id === id && !task.completed;
+                });
+                const active = this.tasks.find(task => task.isCurrent);
+                this.currentTaskId = active ? active.id : null;
+            }
+
+            isSessionActive() {
+                return this.isRunning || this.isPaused;
+            }
+
             addTask(text = null) {
                 const input = document.getElementById('taskInput');
                 const taskText = text || input.value.trim();
                 
                 if (taskText) {
+                    const activate = !this.isSessionActive();
                     const task = {
                         id: Date.now(),
                         text: taskText,
                         completed: false,
-                        isCurrent: false
+                        isCurrent: activate
                     };
-                    
+
+                    if (activate) {
+                        this.tasks.forEach(item => {
+                            item.isCurrent = false;
+                        });
+                        this.currentTaskId = task.id;
+                    }
+
                     this.tasks.push(task);
                     this.saveData();
                     this.renderTasks();
@@ -1553,41 +1488,100 @@
             removeTask(id) {
                 this.tasks = this.tasks.filter(task => task.id !== id);
                 if (this.currentTaskId === id) {
-                    this.currentTaskId = null;
+                    const next = this.getNextIncompleteTask();
+                    this.setActiveTask(next ? next.id : null);
                 }
                 this.saveData();
                 this.renderTasks();
             }
 
-            setCurrentTask(id) {
-                this.tasks.forEach(task => {
-                    task.isCurrent = task.id === id;
-                });
-                this.currentTaskId = id;
+            selectTask(id) {
+                const task = this.tasks.find(item => item.id === id);
+                if (!task || task.completed || task.id === this.currentTaskId) return;
+
+                if (this.isSessionActive()) {
+                    this.showToast('Another task in progress.');
+                    return;
+                }
+
+                this.setActiveTask(id);
                 this.saveData();
+                this.renderTasks();
+            }
+
+            showToast(message) {
+                const toast = document.getElementById('appToast');
+                const text = document.getElementById('appToastText');
+                if (!toast || !text) return;
+
+                text.textContent = message;
+                toast.classList.add('is-visible');
+                clearTimeout(this.toastTimeout);
+                this.toastTimeout = setTimeout(() => this.hideToast(), 3000);
+            }
+
+            hideToast() {
+                clearTimeout(this.toastTimeout);
+                const toast = document.getElementById('appToast');
+                if (toast) {
+                    toast.classList.remove('is-visible');
+                }
+            }
+
+            completeCurrentTask() {
+                const current = this.getCurrentTask();
+                if (!current) return;
+
+                current.completed = true;
+                current.isCurrent = false;
+
+                const next = this.getNextIncompleteTask();
+                this.setActiveTask(next ? next.id : null);
                 this.renderTasks();
             }
 
             renderTasks() {
                 const taskList = document.getElementById('taskList');
                 taskList.innerHTML = '';
+
+                const orderedTasks = [
+                    ...this.tasks.filter(task => !task.completed),
+                    ...this.tasks.filter(task => task.completed)
+                ];
                 
-                this.tasks.forEach(task => {
+                orderedTasks.forEach(task => {
                     const taskElement = document.createElement('div');
-                    taskElement.className = `task-item ${task.isCurrent ? 'current' : ''}`;
+                    const classes = ['task-item'];
+                    if (task.isCurrent && !task.completed) classes.push('current');
+                    if (task.completed) classes.push('completed');
+                    taskElement.className = classes.join(' ');
                     taskElement.innerHTML = `
-                        <span class="task-text">${task.text}</span>
+                        <span class="task-text">${task.completed ? '✓ ' : ''}${this.escapeHtml(task.text)}</span>
                         <div class="task-actions">
-                            <button class="mini-btn" onclick="pomodoro.setCurrentTask(${task.id})" title="设为当前任务">
-                                ${task.isCurrent ? '🎯' : '○'}
-                            </button>
-                            <button class="mini-btn" onclick="pomodoro.removeTask(${task.id})" title="删除任务">
+                            <button class="mini-btn" type="button" onclick="event.stopPropagation(); pomodoro.removeTask(${task.id})" title="删除任务">
                                 ✕
                             </button>
                         </div>
                     `;
+                    taskElement.addEventListener('click', () => this.selectTask(task.id));
                     taskList.appendChild(taskElement);
                 });
+
+                this.updateCurrentTaskDisplay();
+            }
+
+            updateCurrentTaskDisplay() {
+                const display = document.getElementById('currentTaskDisplay');
+                const current = this.getCurrentTask();
+
+                if (!current) {
+                    display.textContent = '';
+                    display.classList.remove('is-visible');
+                    return;
+                }
+
+                display.textContent = current.text;
+                display.classList.add('is-visible');
             }
 
             // 设置管理
@@ -1606,25 +1600,23 @@
             }
 
             saveSettings() {
-                this.config.workDuration = parseInt(document.getElementById('workDuration').value);
-                this.config.shortBreakDuration = parseInt(document.getElementById('shortBreakDuration').value);
-                this.config.longBreakDuration = parseInt(document.getElementById('longBreakDuration').value);
-                this.config.longBreakInterval = parseInt(document.getElementById('longBreakInterval').value);
+                this.config.workDuration = parseInt(document.getElementById('workDuration').value, 10) || 25;
+                this.config.shortBreakDuration = parseInt(document.getElementById('shortBreakDuration').value, 10) || 5;
+                this.config.longBreakDuration = parseInt(document.getElementById('longBreakDuration').value, 10) || 15;
+                this.config.longBreakInterval = parseInt(document.getElementById('longBreakInterval').value, 10) || 4;
                 
                 this.saveData();
                 this.resetTimer();
                 toggleSettings();
             }
 
-
-
             // 数据持久化
             saveData() {
                 const data = {
                     config: this.config,
-                    stats: this.stats,
                     tasks: this.tasks,
-                    currentTaskId: this.currentTaskId
+                    currentTaskId: this.currentTaskId,
+                    completedWorkCount: this.completedWorkCount
                 };
                 localStorage.setItem('pixelPomodoro', JSON.stringify(data));
             }
@@ -1634,10 +1626,18 @@
                 if (saved) {
                     const data = JSON.parse(saved);
                     this.config = { ...this.config, ...data.config };
-                    this.stats = { ...this.stats, ...data.stats };
                     this.tasks = data.tasks || [];
                     this.currentTaskId = data.currentTaskId;
+                    this.completedWorkCount = data.completedWorkCount || 0;
+                    this.setActiveTask(this.currentTaskId);
                 }
+
+                if (!this.getCurrentTask()) {
+                    const next = this.getNextIncompleteTask();
+                    this.setActiveTask(next ? next.id : null);
+                }
+
+                this.timeLeft = this.getCurrentDuration() * 60;
                 this.loadSettings();
             }
         }
@@ -1667,10 +1667,6 @@
             pomodoro.addTask();
         }
 
-        function requestNotificationPermission() {
-            pomodoro.requestNotificationPermission();
-        }
-
         function toggleSettings() {
             const modal = document.getElementById('settingsModal');
             modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
@@ -1678,10 +1674,6 @@
 
         function saveSettings() {
             pomodoro.saveSettings();
-        }
-
-        function resetStats() {
-            pomodoro.resetStats();
         }
 
         function toggleCheckbox(type) {
@@ -1695,6 +1687,7 @@
                 checkbox.classList.add('checked');
                 pomodoro.config[type === 'autoStart' ? 'autoStart' : 'sound'] = true;
             }
+            pomodoro.saveData();
         }
 
         // 点击模态框外部关闭
