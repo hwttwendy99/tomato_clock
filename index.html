@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍅 TOMATO CLOCK🍅 - 像素番茄时钟</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-red: #FF2D2D;
+            --secondary-red: #CC0000;
+            --bright-red: #FF5555;
+            --primary-yellow: #FFD700;
+            --secondary-yellow: #FFA500;
+            --bright-yellow: #FFFF00;
+            --pure-white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --dark-gray: #2C2C2C;
+            --pixel-shadow: 6px 6px 0px rgba(0,0,0,0.4);
+            --pixel-shadow-small: 3px 3px 0px rgba(0,0,0,0.3);
+            --pixel-shadow-large: 8px 8px 0px rgba(0,0,0,0.5);
+            --glow-red: 0 0 20px rgba(255, 45, 45, 0.6);
+            --glow-yellow: 0 0 20px rgba(255, 215, 0, 0.6);
+            --glow-white: 0 0 15px rgba(255, 255, 255, 0.8);
+        }
+
+        body {
+            font-family: 'Press Start 2P', cursive;
+            min-height: 100vh;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 45, 45, 0.1) 0%, transparent 50%),
+                linear-gradient(135deg, var(--pure-white) 0%, var(--light-gray) 100%);
+            color: var(--dark-gray);
+            overflow-x: hidden;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 98px,
+                    rgba(255, 255, 255, 0.03) 100px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 98px,
+                    rgba(255, 255, 255, 0.03) 100px
+                );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        body.work-mode {
+            background: 
+                radial-gradient(circle at 30% 40%, rgba(255, 85, 85, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(204, 0, 0, 0.2) 0%, transparent 50%),
+                linear-gradient(135deg, var(--primary-red) 0%, var(--secondary-red) 100%);
+            color: var(--pure-white);
+            box-shadow: inset 0 0 100px rgba(255, 45, 45, 0.1);
+        }
+
+        body.short-break-mode {
+            background: 
+                radial-gradient(circle at 40% 30%, rgba(255, 255, 0, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 60% 70%, rgba(255, 165, 0, 0.2) 0%, transparent 50%),
+                linear-gradient(135deg, var(--primary-yellow) 0%, var(--secondary-yellow) 100%);
+            color: var(--dark-gray);
+            box-shadow: inset 0 0 100px rgba(255, 215, 0, 0.1);
+        }
+
+        body.long-break-mode {
+            background: 
+                radial-gradient(circle at 50% 20%, rgba(255, 255, 0, 0.4) 0%, transparent 60%),
+                radial-gradient(circle at 30% 80%, rgba(255, 165, 0, 0.3) 0%, transparent 50%),
+                linear-gradient(135deg, var(--secondary-yellow) 0%, var(--bright-yellow) 50%, var(--primary-yellow) 100%);
+            color: var(--dark-gray);
+            box-shadow: inset 0 0 120px rgba(255, 215, 0, 0.15);
+        }
+
+        /* 像素装饰元素 */
+        .pixel-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(255,255,255,0.08) 3px, transparent 3px),
+                radial-gradient(circle at 85% 85%, rgba(255,255,255,0.08) 2px, transparent 2px),
+                radial-gradient(circle at 50% 20%, rgba(255,215,0,0.05) 4px, transparent 4px),
+                radial-gradient(circle at 20% 80%, rgba(255,45,45,0.05) 3px, transparent 3px);
+            background-size: 60px 60px, 40px 40px, 80px 80px, 70px 70px;
+            background-position: 0 0, 20px 20px, 40px 10px, 10px 50px;
+            pointer-events: none;
+            z-index: 2;
+            animation: pixelFloat 20s linear infinite;
+        }
+
+        @keyframes pixelFloat {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(-10px, -5px); }
+            50% { transform: translate(0, -10px); }
+            75% { transform: translate(10px, -5px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px;
+            min-height: 100vh;
+            position: relative;
+            z-index: 10;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            right: -50px;
+            bottom: -50px;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(1px);
+            border-radius: 20px;
+            z-index: -1;
+        }
+
+        /* 主计时器区域 */
+        .main-timer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .main-timer::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(2px);
+            border-radius: 30px;
+            z-index: -1;
+        }
+
+        .app-title {
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            text-shadow: var(--pixel-shadow-large);
+            animation: float 3s ease-in-out infinite, glow 2s ease-in-out infinite alternate;
+            background: linear-gradient(45deg, var(--primary-red), var(--primary-yellow), var(--primary-red));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        .work-mode .app-title {
+            background: linear-gradient(45deg, var(--pure-white), var(--bright-yellow), var(--pure-white));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-8px) rotate(1deg); }
+            50% { transform: translateY(-15px) rotate(0deg); }
+            75% { transform: translateY(-8px) rotate(-1deg); }
+        }
+
+        @keyframes glow {
+            0% { filter: drop-shadow(0 0 10px rgba(255, 45, 45, 0.3)); }
+            100% { filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6)); }
+        }
+
+        .mode-badge {
+            background: linear-gradient(135deg, var(--primary-yellow), var(--secondary-yellow));
+            color: var(--dark-gray);
+            padding: 15px 30px;
+            border-radius: 0;
+            font-size: 0.9rem;
+            margin-bottom: 50px;
+            box-shadow: var(--pixel-shadow-large);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            border: 3px solid var(--dark-gray);
+            position: relative;
+            overflow: hidden;
+            font-weight: bold;
+            animation: badgePulse 2s ease-in-out infinite;
+        }
+
+        .mode-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            50% { left: 100%; }
+            100% { left: 100%; }
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .work-mode .mode-badge {
+            background: linear-gradient(135deg, var(--pure-white), var(--light-gray));
+            color: var(--primary-red);
+            border-color: var(--pure-white);
+            box-shadow: var(--glow-white);
+        }
+
+        .timer-wrapper {
+            position: relative;
+            margin-bottom: 60px;
+        }
+
+        .timer-display {
+            font-family: 'Orbitron', 'Press Start 2P', monospace;
+            font-size: 6rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--pure-white) 0%, var(--light-gray) 100%);
+            color: var(--primary-red);
+            padding: 50px 80px;
+            border-radius: 0;
+            box-shadow: 
+                var(--pixel-shadow-large),
+                inset 0 0 30px rgba(255, 45, 45, 0.1),
+                0 0 30px rgba(255, 45, 45, 0.3);
+            text-shadow: 
+                2px 2px 0px rgba(0,0,0,0.3),
+                0 0 10px rgba(255, 45, 45, 0.5);
+            letter-spacing: 12px;
+            border: 5px solid var(--dark-gray);
+            position: relative;
+            overflow: hidden;
+            animation: timerGlow 3s ease-in-out infinite alternate;
+        }
+
+        .timer-display::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 10px,
+                    rgba(255, 255, 255, 0.05) 10px,
+                    rgba(255, 255, 255, 0.05) 20px
+                );
+            pointer-events: none;
+        }
+
+        .timer-display::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--primary-red), var(--primary-yellow), var(--primary-red));
+            background-size: 400% 400%;
+            z-index: -1;
+            animation: borderFlow 4s ease-in-out infinite;
+        }
+
+        @keyframes timerGlow {
+            0% { 
+                box-shadow: 
+                    var(--pixel-shadow-large),
+                    inset 0 0 30px rgba(255, 45, 45, 0.1),
+                    0 0 30px rgba(255, 45, 45, 0.3);
+            }
+            100% { 
+                box-shadow: 
+                    var(--pixel-shadow-large),
+                    inset 0 0 40px rgba(255, 45, 45, 0.2),
+                    0 0 50px rgba(255, 45, 45, 0.5);
+            }
+        }
+
+        @keyframes borderFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .work-mode .timer-display {
+            background: linear-gradient(135deg, var(--primary-yellow) 0%, var(--bright-yellow) 100%);
+            color: var(--dark-gray);
+            border-color: var(--pure-white);
+            box-shadow: 
+                var(--pixel-shadow-large),
+                inset 0 0 30px rgba(255, 215, 0, 0.1),
+                0 0 40px rgba(255, 215, 0, 0.4);
+            text-shadow: 
+                2px 2px 0px rgba(0,0,0,0.3),
+                0 0 10px rgba(255, 215, 0, 0.6);
+        }
+
+        .work-mode .timer-display::after {
+            background: linear-gradient(45deg, var(--pure-white), var(--bright-yellow), var(--pure-white));
+            background-size: 400% 400%;
+        }
+
+        .short-break-mode .timer-display,
+        .long-break-mode .timer-display {
+            background: linear-gradient(135deg, var(--pure-white) 0%, var(--light-gray) 50%, var(--pure-white) 100%);
+            color: var(--primary-red);
+            border-color: var(--dark-gray);
+            box-shadow: 
+                var(--pixel-shadow-large),
+                inset 0 0 30px rgba(255, 215, 0, 0.1),
+                0 0 40px rgba(255, 215, 0, 0.4);
+            text-shadow: 
+                2px 2px 0px rgba(0,0,0,0.3),
+                0 0 10px rgba(255, 45, 45, 0.5);
+        }
+
+        .short-break-mode .timer-display::after,
+        .long-break-mode .timer-display::after {
+            background: linear-gradient(45deg, var(--primary-yellow), var(--primary-red), var(--primary-yellow));
+            background-size: 400% 400%;
+        }
+
+        /* 精美像素风格进度条 */
+        .progress-bar {
+            width: 500px;
+            height: 30px;
+            background: linear-gradient(135deg, rgba(0,0,0,0.2), rgba(0,0,0,0.4));
+            border: 4px solid currentColor;
+            margin: 40px 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                var(--pixel-shadow),
+                inset 0 0 20px rgba(0,0,0,0.3);
+        }
+
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent 0px,
+                transparent 3px,
+                rgba(255,255,255,0.1) 3px,
+                rgba(255,255,255,0.1) 6px
+            );
+            pointer-events: none;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                currentColor 0%,
+                rgba(255,255,255,0.9) 50%,
+                currentColor 100%
+            );
+            width: 0%;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            box-shadow: 0 0 15px currentColor;
+            animation: progressPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes progressPulse {
+            0%, 100% { 
+                box-shadow: 0 0 15px currentColor;
+                filter: brightness(1);
+            }
+            50% { 
+                box-shadow: 0 0 25px currentColor;
+                filter: brightness(1.2);
+            }
+        }
+
+        .progress-fill::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent 0px,
+                transparent 8px,
+                rgba(255,255,255,0.4) 8px,
+                rgba(255,255,255,0.4) 12px,
+                transparent 12px,
+                transparent 20px
+            );
+            animation: progressFlow 2s linear infinite;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            right: 2px;
+            bottom: 2px;
+            background: linear-gradient(
+                to right,
+                rgba(255,255,255,0.3),
+                transparent 30%,
+                transparent 70%,
+                rgba(255,255,255,0.3)
+            );
+        }
+
+        @keyframes progressFlow {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* 精美控制按钮 */
+        .controls {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .pixel-btn {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 18px 35px;
+            border: none;
+            border-radius: 0;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--pixel-shadow-large);
+            position: relative;
+            border: 4px solid var(--dark-gray);
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .pixel-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+            z-index: -1;
+        }
+
+        .pixel-btn:hover::before {
+            left: 100%;
+        }
+
+        .pixel-btn:hover {
+            transform: translate(3px, 3px) scale(1.05);
+            box-shadow: 3px 3px 0px rgba(0,0,0,0.4);
+        }
+
+        .pixel-btn:active {
+            transform: translate(6px, 6px) scale(0.98);
+            box-shadow: 1px 1px 0px rgba(0,0,0,0.3);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-red), var(--bright-red));
+            color: var(--pure-white);
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.3);
+            animation: primaryGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes primaryGlow {
+            0% { 
+                box-shadow: 
+                    var(--pixel-shadow-large),
+                    0 0 20px rgba(255, 45, 45, 0.3);
+            }
+            100% { 
+                box-shadow: 
+                    var(--pixel-shadow-large),
+                    0 0 30px rgba(255, 45, 45, 0.5);
+            }
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--primary-yellow), var(--bright-yellow));
+            color: var(--dark-gray);
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.5);
+            animation: secondaryGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes secondaryGlow {
+            0% { 
+                box-shadow: 
+                    var(--pixel-shadow-large),
+                    0 0 15px rgba(255, 215, 0, 0.3);
+            }
+            100% { 
+                box-shadow: 
+                    var(--pixel-shadow-large),
+                    0 0 25px rgba(255, 215, 0, 0.5);
+            }
+        }
+
+        .btn-tertiary {
+            background: linear-gradient(135deg, var(--pure-white), var(--light-gray));
+            color: var(--dark-gray);
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.8);
+            animation: tertiaryGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes tertiaryGlow {
+            0% { 
+                box-shadow: 
+                    var(--pixel-shadow-large),
+                    0 0 10px rgba(255, 255, 255, 0.3);
+            }
+            100% { 
+                box-shadow: 
+                    var(--pixel-shadow-large),
+                    0 0 20px rgba(255, 255, 255, 0.5);
+            }
+        }
+
+        .work-mode .btn-primary {
+            background: linear-gradient(135deg, var(--primary-yellow), var(--bright-yellow));
+            color: var(--dark-gray);
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.5);
+        }
+
+        .work-mode .btn-secondary {
+            background: linear-gradient(135deg, var(--pure-white), var(--light-gray));
+            color: var(--primary-red);
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.8);
+        }
+
+        .work-mode .btn-tertiary {
+            background: linear-gradient(135deg, var(--light-gray), var(--pure-white));
+            color: var(--dark-gray);
+            border-color: var(--pure-white);
+        }
+
+        /* 精美设置按钮 */
+        .settings-trigger {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary-yellow), var(--bright-yellow));
+            border: 4px solid var(--dark-gray);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 
+                var(--pixel-shadow-large),
+                0 0 20px rgba(255, 215, 0, 0.4);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            animation: settingsPulse 3s ease-in-out infinite;
+            overflow: hidden;
+        }
+
+        .settings-trigger::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .settings-trigger:hover::before {
+            opacity: 1;
+        }
+
+        .settings-trigger:hover {
+            transform: rotate(180deg) scale(1.1);
+            box-shadow: 
+                var(--pixel-shadow-large),
+                0 0 30px rgba(255, 215, 0, 0.6);
+        }
+
+        @keyframes settingsPulse {
+            0%, 100% { 
+                box-shadow: 
+                    var(--pixel-shadow-large),
+                    0 0 20px rgba(255, 215, 0, 0.4);
+            }
+            50% { 
+                box-shadow: 
+                    var(--pixel-shadow-large),
+                    0 0 35px rgba(255, 215, 0, 0.6);
+            }
+        }
+
+        .work-mode .settings-trigger {
+            background: linear-gradient(135deg, var(--pure-white), var(--light-gray));
+            color: var(--primary-red);
+            border-color: var(--pure-white);
+            box-shadow: 
+                var(--pixel-shadow-large),
+                0 0 20px rgba(255, 255, 255, 0.6);
+        }
+
+        .work-mode .settings-trigger:hover {
+            box-shadow: 
+                var(--pixel-shadow-large),
+                0 0 40px rgba(255, 255, 255, 0.8);
+        }
+
+        /* 任务区域 */
+        .task-section {
+            width: 100%;
+            max-width: 600px;
+            background: 
+                linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,248,248,0.95) 100%);
+            backdrop-filter: blur(20px);
+            border: 5px solid var(--dark-gray);
+            box-shadow: 
+                var(--pixel-shadow-large),
+                0 0 30px rgba(0,0,0,0.1),
+                inset 0 0 30px rgba(255,255,255,0.1);
+            padding: 35px;
+            color: var(--dark-gray);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .task-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent 0px,
+                transparent 20px,
+                rgba(255,215,0,0.02) 20px,
+                rgba(255,215,0,0.02) 22px
+            );
+            pointer-events: none;
+        }
+
+        .task-section::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--primary-yellow), var(--primary-red), var(--primary-yellow));
+            background-size: 400% 400%;
+            z-index: -1;
+            animation: taskBorder 6s ease-in-out infinite;
+        }
+
+        @keyframes taskBorder {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .work-mode .task-section {
+            background: 
+                linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.95) 100%);
+            border-color: var(--pure-white);
+            box-shadow: 
+                var(--pixel-shadow-large),
+                0 0 40px rgba(255,255,255,0.3),
+                inset 0 0 30px rgba(255,215,0,0.1);
+        }
+
+        .work-mode .task-section::after {
+            background: linear-gradient(45deg, var(--pure-white), var(--bright-yellow), var(--pure-white));
+            background-size: 400% 400%;
+        }
+
+        .section-header {
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            color: var(--primary-red);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 3px solid var(--primary-yellow);
+            padding-bottom: 12px;
+            position: relative;
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.5);
+            animation: headerGlow 2s ease-in-out infinite alternate;
+        }
+
+        .section-header::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 40%;
+            height: 3px;
+            background: var(--primary-red);
+            animation: headerUnderline 3s ease-in-out infinite;
+        }
+
+        @keyframes headerGlow {
+            0% { text-shadow: 1px 1px 0px rgba(255,255,255,0.5); }
+            100% { text-shadow: 2px 2px 4px rgba(255,45,45,0.3); }
+        }
+
+        @keyframes headerUnderline {
+            0%, 100% { width: 40%; }
+            50% { width: 80%; }
+        }
+
+        /* 任务列表 */
+        .task-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .pixel-input {
+            font-family: 'Press Start 2P', cursive;
+            flex: 1;
+            padding: 12px;
+            border: 3px solid var(--dark-gray);
+            background: var(--pure-white);
+            font-size: 0.7rem;
+            color: var(--dark-gray);
+        }
+
+        .pixel-input:focus {
+            outline: none;
+            border-color: var(--primary-red);
+            box-shadow: 0 0 0 2px var(--primary-yellow);
+        }
+
+        .task-item {
+            background: var(--light-gray);
+            border: 2px solid var(--dark-gray);
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .task-item.current {
+            background: var(--primary-yellow);
+            border-color: var(--primary-red);
+            box-shadow: var(--pixel-shadow-small);
+        }
+
+        .task-text {
+            font-size: 0.7rem;
+            flex: 1;
+            text-align: left;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .mini-btn {
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--dark-gray);
+            background: var(--pure-white);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+        }
+
+        .mini-btn:hover {
+            background: var(--primary-yellow);
+        }
+
+
+
+        /* 设置模态框 */
+        .settings-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .settings-panel {
+            background: var(--pure-white);
+            border: 4px solid var(--dark-gray);
+            box-shadow: 8px 8px 0px rgba(0,0,0,0.4);
+            padding: 40px;
+            width: 90%;
+            max-width: 600px;
+            color: var(--dark-gray);
+        }
+
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .setting-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .setting-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .number-input {
+            width: 80px;
+            padding: 8px;
+            border: 2px solid var(--dark-gray);
+            background: var(--light-gray);
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.7rem;
+            text-align: center;
+        }
+
+        .checkbox-pixel {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--dark-gray);
+            background: var(--pure-white);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .checkbox-pixel.checked {
+            background: var(--primary-red);
+        }
+
+        .checkbox-pixel.checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--pure-white);
+            font-size: 0.8rem;
+        }
+
+        /* 通知横幅 */
+        .notification-banner {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-yellow);
+            border: 3px solid var(--dark-gray);
+            padding: 15px 25px;
+            box-shadow: var(--pixel-shadow);
+            z-index: 999;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: none;
+        }
+
+        /* 精美响应式设计 */
+        @media (max-width: 1200px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                max-width: 900px;
+            }
+
+            .sidebar {
+                width: 100%;
+                order: -1;
+            }
+
+            .main-timer {
+                min-height: 70vh;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .app-title {
+                font-size: 2rem;
+                margin-bottom: 30px;
+            }
+
+            .timer-display {
+                font-size: 4.5rem;
+                padding: 40px 50px;
+                letter-spacing: 8px;
+            }
+
+            .progress-bar {
+                width: 400px;
+            }
+
+            .controls {
+                gap: 20px;
+            }
+
+            .pixel-btn {
+                font-size: 0.9rem;
+                padding: 15px 28px;
+            }
+
+            .sidebar {
+                padding: 30px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 15px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .app-title {
+                font-size: 1.6rem;
+                margin-bottom: 25px;
+            }
+
+            .timer-display {
+                font-size: 3.5rem;
+                padding: 30px 40px;
+                letter-spacing: 6px;
+            }
+
+            .progress-bar {
+                width: 300px;
+                height: 25px;
+            }
+
+            .pixel-btn {
+                font-size: 0.8rem;
+                padding: 12px 20px;
+                letter-spacing: 1px;
+            }
+
+            .controls {
+                gap: 15px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .stat-card {
+                padding: 15px;
+            }
+
+            .stat-number {
+                font-size: 1.5rem;
+            }
+
+            .container {
+                padding: 15px;
+                gap: 25px;
+            }
+
+            .sidebar {
+                padding: 25px;
+            }
+
+            .settings-trigger {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+                top: 20px;
+                right: 20px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .timer-display {
+                font-size: 2.8rem;
+                padding: 25px 30px;
+                letter-spacing: 4px;
+            }
+
+            .progress-bar {
+                width: 250px;
+                height: 20px;
+            }
+
+            .pixel-btn {
+                font-size: 0.7rem;
+                padding: 10px 15px;
+            }
+
+            .app-title {
+                font-size: 1.4rem;
+            }
+
+            .mode-badge {
+                font-size: 0.7rem;
+                padding: 12px 20px;
+            }
+        }
+
+        /* 精美动画效果 */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .timer-complete {
+            animation: 
+                pulse 0.5s ease-in-out 3,
+                completionGlow 2s ease-in-out;
+        }
+
+        @keyframes completionGlow {
+            0% { 
+                box-shadow: 
+                    var(--pixel-shadow-large),
+                    0 0 30px currentColor;
+            }
+            50% { 
+                box-shadow: 
+                    var(--pixel-shadow-large),
+                    0 0 60px currentColor,
+                    0 0 100px rgba(255, 215, 0, 0.5);
+            }
+            100% { 
+                box-shadow: 
+                    var(--pixel-shadow-large),
+                    0 0 30px currentColor;
+            }
+        }
+
+        /* 闪烁特效 */
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--bright-yellow);
+            animation: sparkle 1s ease-in-out infinite;
+        }
+
+        .sparkle:nth-child(1) { top: 20%; left: 20%; animation-delay: 0s; }
+        .sparkle:nth-child(2) { top: 20%; right: 20%; animation-delay: 0.2s; }
+        .sparkle:nth-child(3) { bottom: 20%; left: 20%; animation-delay: 0.4s; }
+        .sparkle:nth-child(4) { bottom: 20%; right: 20%; animation-delay: 0.6s; }
+        .sparkle:nth-child(5) { top: 50%; left: 10%; animation-delay: 0.1s; }
+        .sparkle:nth-child(6) { top: 50%; right: 10%; animation-delay: 0.3s; }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+
+        /* 像素装饰点 */
+        .pixel-decoration {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: currentColor;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+    <div class="pixel-bg"></div>
+    
+    <!-- 设置按钮 -->
+    <div class="settings-trigger" onclick="toggleSettings()">⚙</div>
+
+    <!-- 通知横幅 -->
+    <div id="notificationBanner" class="notification-banner">
+        <span>🔔 点击启用桌面通知获得更好体验</span>
+        <button class="mini-btn" onclick="requestNotificationPermission()" style="margin-left: 15px;">启用</button>
+    </div>
+
+    <div class="container">
+        <!-- 主计时器区域 -->
+        <div class="main-timer">
+            <h1 class="app-title">🍅 TOMATO CLOCK🍅</h1>
+            
+            <div class="mode-badge" id="modeBadge">🎯 FOCUS TIME</div>
+            
+            <div class="timer-wrapper">
+                <div class="timer-display" id="timerDisplay">25:00</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="pixel-btn btn-primary" id="startPauseBtn" onclick="toggleTimer()">START</button>
+                <button class="pixel-btn btn-secondary" onclick="resetTimer()">STOP</button>
+                <button class="pixel-btn btn-tertiary" onclick="skipTimer()">RESET</button>
+            </div>
+        </div>
+
+        <!-- 任务区域 -->
+        <div class="task-section slide-in">
+            <div class="section-header">📋 TO DO</div>
+            <div class="task-input-group">
+                <input type="text" class="pixel-input" id="taskInput" placeholder="Add new task...">
+                <button class="pixel-btn btn-secondary" onclick="addTask()" style="padding: 12px 15px;">+</button>
+            </div>
+            <div id="taskList"></div>
+        </div>
+    </div>
+
+    <!-- 设置模态框 -->
+    <div class="settings-modal" id="settingsModal">
+        <div class="settings-panel">
+            <h2 class="section-header" style="border: none; text-align: center; margin-bottom: 30px;">⚙️ SETTINGS</h2>
+            
+            <div class="setting-row">
+                <span class="setting-label">Work Duration</span>
+                <div class="setting-control">
+                    <input type="number" class="number-input" id="workDuration" min="1" max="60" value="25">
+                    <span>min</span>
+                </div>
+            </div>
+
+            <div class="setting-row">
+                <span class="setting-label">Short Break</span>
+                <div class="setting-control">
+                    <input type="number" class="number-input" id="shortBreakDuration" min="1" max="30" value="5">
+                    <span>min</span>
+                </div>
+            </div>
+
+            <div class="setting-row">
+                <span class="setting-label">Long Break</span>
+                <div class="setting-control">
+                    <input type="number" class="number-input" id="longBreakDuration" min="1" max="60" value="15">
+                    <span>min</span>
+                </div>
+            </div>
+
+            <div class="setting-row">
+                <span class="setting-label">Long Break Interval</span>
+                <div class="setting-control">
+                    <input type="number" class="number-input" id="longBreakInterval" min="2" max="10" value="4">
+                    <span>cycles</span>
+                </div>
+            </div>
+
+            <div class="setting-row">
+                <span class="setting-label">Auto Start</span>
+                <div class="setting-control">
+                    <div class="checkbox-pixel" id="autoStartCheck" onclick="toggleCheckbox('autoStart')"></div>
+                </div>
+            </div>
+
+            <div class="setting-row">
+                <span class="setting-label">Sound Alerts</span>
+                <div class="setting-control">
+                    <div class="checkbox-pixel checked" id="soundCheck" onclick="toggleCheckbox('sound')"></div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 15px; margin-top: 30px; justify-content: center;">
+                <button class="pixel-btn btn-primary" onclick="saveSettings()">SAVE</button>
+                <button class="pixel-btn btn-secondary" onclick="toggleSettings()">CANCEL</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 番茄时钟核心类
+        class PixelPomodoro {
+            constructor() {
+                // 计时器状态
+                this.isRunning = false;
+                this.isPaused = false;
+                this.currentMode = 'work'; // 'work', 'shortBreak', 'longBreak'
+                this.timeLeft = 25 * 60; // 秒
+                this.timerId = null;
+                
+                // 设置配置
+                this.config = {
+                    workDuration: 25,
+                    shortBreakDuration: 5,
+                    longBreakDuration: 15,
+                    longBreakInterval: 4,
+                    autoStart: true,
+                    sound: true
+                };
+                
+
+                
+                // 任务管理
+                this.tasks = [];
+                this.currentTaskId = null;
+                
+                // 初始化应用
+                this.init();
+            }
+
+            init() {
+                this.loadData();
+                this.updateDisplay();
+                this.updateProgressBar();
+                this.checkNotificationPermission();
+                this.setupKeyboardShortcuts();
+                this.renderTasks();
+            }
+
+
+
+            setupKeyboardShortcuts() {
+                document.addEventListener('keydown', (e) => {
+                    if (e.target.matches('input, textarea')) return;
+                    
+                    switch(e.key) {
+                        case ' ':
+                            e.preventDefault();
+                            this.toggleTimer();
+                            break;
+                        case 'r':
+                            if (e.ctrlKey) {
+                                e.preventDefault();
+                                this.resetTimer();
+                            }
+                            break;
+                        case 's':
+                            if (e.ctrlKey) {
+                                e.preventDefault();
+                                this.skipTimer();
+                            }
+                            break;
+                    }
+                });
+            }
+
+            // 计时器控制
+            toggleTimer() {
+                if (this.isRunning) {
+                    this.pauseTimer();
+                } else {
+                    this.startTimer();
+                }
+            }
+
+            startTimer() {
+                this.isRunning = true;
+                this.isPaused = false;
+                
+                this.timerId = setInterval(() => {
+                    this.timeLeft--;
+                    this.updateDisplay();
+                    this.updateProgressBar();
+                    this.updatePageTitle();
+                    
+                    if (this.timeLeft <= 0) {
+                        this.completeTimer();
+                    }
+                }, 1000);
+                
+                document.getElementById('startPauseBtn').textContent = 'PAUSE';
+                this.updatePageTitle();
+            }
+
+            pauseTimer() {
+                this.isRunning = false;
+                this.isPaused = true;
+                clearInterval(this.timerId);
+                
+                document.getElementById('startPauseBtn').textContent = 'START';
+                document.title = '⏸️ TOMATO CLOCK🍅 - PAUSED';
+            }
+
+            resetTimer() {
+                this.isRunning = false;
+                this.isPaused = false;
+                clearInterval(this.timerId);
+                
+                this.timeLeft = this.getCurrentDuration() * 60;
+                this.updateDisplay();
+                this.updateProgressBar();
+                
+                document.getElementById('startPauseBtn').textContent = 'START';
+                document.title = '🍅 TOMATO CLOCK🍅 - 像素番茄时钟';
+            }
+
+            skipTimer() {
+                clearInterval(this.timerId);
+                this.completeTimer();
+            }
+
+            completeTimer() {
+                this.isRunning = false;
+                clearInterval(this.timerId);
+                
+                // 播放提醒
+                this.playAlert();
+                this.showNotification();
+                this.showVisualFeedback();
+                
+                // 切换模式
+                this.switchMode();
+                
+                // 自动开始（如果启用）
+                if (this.config.autoStart) {
+                    setTimeout(() => {
+                        this.startTimer();
+                    }, 3000);
+                }
+                
+                this.saveData();
+            }
+
+            switchMode() {
+                if (this.currentMode === 'work') {
+                    // 简单的短休息轮换
+                    this.currentMode = 'shortBreak';
+                } else {
+                    this.currentMode = 'work';
+                }
+                
+                this.timeLeft = this.getCurrentDuration() * 60;
+                this.updateDisplay();
+                this.updateProgressBar();
+                this.updateBodyMode();
+                document.getElementById('startPauseBtn').textContent = 'START';
+            }
+
+            getCurrentDuration() {
+                switch(this.currentMode) {
+                    case 'work': return this.config.workDuration;
+                    case 'shortBreak': return this.config.shortBreakDuration;
+                    case 'longBreak': return this.config.longBreakDuration;
+                    default: return this.config.workDuration;
+                }
+            }
+
+            // 显示更新
+            updateDisplay() {
+                const minutes = Math.floor(this.timeLeft / 60);
+                const seconds = this.timeLeft % 60;
+                const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                document.getElementById('timerDisplay').textContent = timeString;
+                
+                // 更新模式徽章
+                const modeTexts = {
+                    'work': '🎯 FOCUS TIME',
+                    'shortBreak': '☕ SHORT BREAK',
+                    'longBreak': '🌴 LONG BREAK'
+                };
+                document.getElementById('modeBadge').textContent = modeTexts[this.currentMode];
+            }
+
+            updateProgressBar() {
+                const totalTime = this.getCurrentDuration() * 60;
+                const progress = ((totalTime - this.timeLeft) / totalTime) * 100;
+                document.getElementById('progressFill').style.width = `${Math.max(0, Math.min(100, progress))}%`;
+            }
+
+            updateBodyMode() {
+                document.body.className = `${this.currentMode}-mode`;
+            }
+
+            updatePageTitle() {
+                const minutes = Math.floor(this.timeLeft / 60);
+                const seconds = this.timeLeft % 60;
+                const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                const modeEmojis = {
+                    'work': '🍅',
+                    'shortBreak': '☕',
+                    'longBreak': '🌴'
+                };
+                
+                if (this.isRunning) {
+                    document.title = `${modeEmojis[this.currentMode]} ${timeString} - TOMATO CLOCK🍅`;
+                }
+            }
+
+
+
+            // 提醒功能
+            playAlert() {
+                if (!this.config.sound) return;
+                
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                    oscillator.frequency.setValueAtTime(600, audioContext.currentTime + 0.1);
+                    oscillator.frequency.setValueAtTime(800, audioContext.currentTime + 0.2);
+                    
+                    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                    
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.5);
+                } catch (e) {
+                    console.log('音频播放失败:', e);
+                }
+            }
+
+            showNotification() {
+                if (Notification.permission === 'granted') {
+                    const messages = {
+                        'work': '🍅 专注时间结束！休息一下吧！',
+                        'shortBreak': '☕ 短休息结束！继续专注工作！',
+                        'longBreak': '🌴 长休息结束！开始新的工作周期！'
+                    };
+                    
+                    new Notification('TOMATO CLOCK🍅', {
+                        body: messages[this.currentMode],
+                        icon: '🍅',
+                        tag: 'pomodoro'
+                    });
+                }
+            }
+
+            showVisualFeedback() {
+                const timer = document.getElementById('timerDisplay');
+                timer.classList.add('timer-complete');
+                setTimeout(() => {
+                    timer.classList.remove('timer-complete');
+                }, 1500);
+            }
+
+            checkNotificationPermission() {
+                if ('Notification' in window && Notification.permission === 'default') {
+                    document.getElementById('notificationBanner').style.display = 'block';
+                }
+            }
+
+            requestNotificationPermission() {
+                if ('Notification' in window) {
+                    Notification.requestPermission().then(permission => {
+                        if (permission === 'granted') {
+                            document.getElementById('notificationBanner').style.display = 'none';
+                        }
+                    });
+                }
+            }
+
+            // 任务管理
+            addTask(text = null) {
+                const input = document.getElementById('taskInput');
+                const taskText = text || input.value.trim();
+                
+                if (taskText) {
+                    const task = {
+                        id: Date.now(),
+                        text: taskText,
+                        completed: false,
+                        isCurrent: false
+                    };
+                    
+                    this.tasks.push(task);
+                    this.saveData();
+                    this.renderTasks();
+                    input.value = '';
+                }
+            }
+
+            removeTask(id) {
+                this.tasks = this.tasks.filter(task => task.id !== id);
+                if (this.currentTaskId === id) {
+                    this.currentTaskId = null;
+                }
+                this.saveData();
+                this.renderTasks();
+            }
+
+            setCurrentTask(id) {
+                this.tasks.forEach(task => {
+                    task.isCurrent = task.id === id;
+                });
+                this.currentTaskId = id;
+                this.saveData();
+                this.renderTasks();
+            }
+
+            renderTasks() {
+                const taskList = document.getElementById('taskList');
+                taskList.innerHTML = '';
+                
+                this.tasks.forEach(task => {
+                    const taskElement = document.createElement('div');
+                    taskElement.className = `task-item ${task.isCurrent ? 'current' : ''}`;
+                    taskElement.innerHTML = `
+                        <span class="task-text">${task.text}</span>
+                        <div class="task-actions">
+                            <button class="mini-btn" onclick="pomodoro.setCurrentTask(${task.id})" title="设为当前任务">
+                                ${task.isCurrent ? '🎯' : '○'}
+                            </button>
+                            <button class="mini-btn" onclick="pomodoro.removeTask(${task.id})" title="删除任务">
+                                ✕
+                            </button>
+                        </div>
+                    `;
+                    taskList.appendChild(taskElement);
+                });
+            }
+
+            // 设置管理
+            loadSettings() {
+                Object.keys(this.config).forEach(key => {
+                    const element = document.getElementById(key === 'autoStart' ? 'autoStartCheck' : 
+                                                         key === 'sound' ? 'soundCheck' : key);
+                    if (element) {
+                        if (key === 'autoStart' || key === 'sound') {
+                            element.className = this.config[key] ? 'checkbox-pixel checked' : 'checkbox-pixel';
+                        } else {
+                            element.value = this.config[key];
+                        }
+                    }
+                });
+            }
+
+            saveSettings() {
+                this.config.workDuration = parseInt(document.getElementById('workDuration').value);
+                this.config.shortBreakDuration = parseInt(document.getElementById('shortBreakDuration').value);
+                this.config.longBreakDuration = parseInt(document.getElementById('longBreakDuration').value);
+                this.config.longBreakInterval = parseInt(document.getElementById('longBreakInterval').value);
+                
+                this.saveData();
+                this.resetTimer();
+                toggleSettings();
+            }
+
+
+
+            // 数据持久化
+            saveData() {
+                const data = {
+                    config: this.config,
+                    stats: this.stats,
+                    tasks: this.tasks,
+                    currentTaskId: this.currentTaskId
+                };
+                localStorage.setItem('pixelPomodoro', JSON.stringify(data));
+            }
+
+            loadData() {
+                const saved = localStorage.getItem('pixelPomodoro');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    this.config = { ...this.config, ...data.config };
+                    this.stats = { ...this.stats, ...data.stats };
+                    this.tasks = data.tasks || [];
+                    this.currentTaskId = data.currentTaskId;
+                }
+                this.loadSettings();
+            }
+        }
+
+        // 全局变量和函数
+        let pomodoro;
+
+        // 初始化应用
+        document.addEventListener('DOMContentLoaded', () => {
+            pomodoro = new PixelPomodoro();
+        });
+
+        // 全局函数（HTML调用）
+        function toggleTimer() {
+            pomodoro.toggleTimer();
+        }
+
+        function resetTimer() {
+            pomodoro.resetTimer();
+        }
+
+        function skipTimer() {
+            pomodoro.skipTimer();
+        }
+
+        function addTask() {
+            pomodoro.addTask();
+        }
+
+        function requestNotificationPermission() {
+            pomodoro.requestNotificationPermission();
+        }
+
+        function toggleSettings() {
+            const modal = document.getElementById('settingsModal');
+            modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        function saveSettings() {
+            pomodoro.saveSettings();
+        }
+
+        function resetStats() {
+            pomodoro.resetStats();
+        }
+
+        function toggleCheckbox(type) {
+            const checkbox = document.getElementById(type === 'autoStart' ? 'autoStartCheck' : 'soundCheck');
+            const isChecked = checkbox.classList.contains('checked');
+            
+            if (isChecked) {
+                checkbox.classList.remove('checked');
+                pomodoro.config[type === 'autoStart' ? 'autoStart' : 'sound'] = false;
+            } else {
+                checkbox.classList.add('checked');
+                pomodoro.config[type === 'autoStart' ? 'autoStart' : 'sound'] = true;
+            }
+        }
+
+        // 点击模态框外部关闭
+        document.getElementById('settingsModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                toggleSettings();
+            }
+        });
+
+        // 任务输入回车添加
+        document.getElementById('taskInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addTask();
+            }
+        });
+
+        // 页面可见性变化处理
+        document.addEventListener('visibilitychange', () => {
+            if (pomodoro && pomodoro.isRunning) {
+                pomodoro.updatePageTitle();
+            }
+        });
+    </script>
+</body>
+</html> 
