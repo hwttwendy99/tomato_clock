@@ -1,0 +1,1621 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-red: #FF2D2D;
+            --secondary-red: #CC0000;
+            --bright-red: #FF5555;
+            --primary-yellow: #FFD700;
+            --secondary-yellow: #FFA500;
+            --bright-yellow: #FFFF00;
+            --pure-white: #FFFFFF;
+            --light-gray: #F5F5F5;
+            --dark-gray: #2C2C2C;
+            --pixel-shadow: 6px 6px 0px rgba(0,0,0,0.4);
+            --pixel-shadow-small: 3px 3px 0px rgba(0,0,0,0.3);
+            --pixel-shadow-large: 8px 8px 0px rgba(0,0,0,0.5);
+            --glow-red: 0 0 20px rgba(255, 45, 45, 0.6);
+            --glow-yellow: 0 0 20px rgba(255, 215, 0, 0.6);
+            --glow-white: 0 0 15px rgba(255, 255, 255, 0.8);
+        }
+
+        body {
+            font-family: 'Press Start 2P', cursive;
+            min-height: 100vh;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 45, 45, 0.1) 0%, transparent 50%),
+                linear-gradient(135deg, var(--pure-white) 0%, var(--light-gray) 100%);
+            color: var(--dark-gray);
+            overflow-x: hidden;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 98px,
+                    rgba(255, 255, 255, 0.03) 100px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 98px,
+                    rgba(255, 255, 255, 0.03) 100px
+                );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        body.work-mode {
+            background: 
+                radial-gradient(circle at 30% 40%, rgba(255, 85, 85, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(204, 0, 0, 0.2) 0%, transparent 50%),
+                linear-gradient(135deg, var(--primary-red) 0%, var(--secondary-red) 100%);
+            color: var(--pure-white);
+            box-shadow: inset 0 0 100px rgba(255, 45, 45, 0.1);
+        }
+
+        body.short-break-mode {
+            background: 
+                radial-gradient(circle at 40% 30%, rgba(255, 255, 0, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 60% 70%, rgba(255, 165, 0, 0.2) 0%, transparent 50%),
+                linear-gradient(135deg, var(--primary-yellow) 0%, var(--secondary-yellow) 100%);
+            color: var(--dark-gray);
+            box-shadow: inset 0 0 100px rgba(255, 215, 0, 0.1);
+        }
+
+        body.long-break-mode {
+            background: 
+                radial-gradient(circle at 50% 20%, rgba(255, 255, 0, 0.4) 0%, transparent 60%),
+                radial-gradient(circle at 30% 80%, rgba(255, 165, 0, 0.3) 0%, transparent 50%),
+                linear-gradient(135deg, var(--secondary-yellow) 0%, var(--bright-yellow) 50%, var(--primary-yellow) 100%);
+            color: var(--dark-gray);
+            box-shadow: inset 0 0 120px rgba(255, 215, 0, 0.15);
+        }
+
+        /* 像素装饰元素 */
+        .pixel-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(255,255,255,0.08) 3px, transparent 3px),
+                radial-gradient(circle at 85% 85%, rgba(255,255,255,0.08) 2px, transparent 2px),
+                radial-gradient(circle at 50% 20%, rgba(255,215,0,0.05) 4px, transparent 4px),
+                radial-gradient(circle at 20% 80%, rgba(255,45,45,0.05) 3px, transparent 3px);
+            background-size: 60px 60px, 40px 40px, 80px 80px, 70px 70px;
+            background-position: 0 0, 20px 20px, 40px 10px, 10px 50px;
+            pointer-events: none;
+            z-index: 2;
+            animation: pixelFloat 20s linear infinite;
+        }
+
+        @keyframes pixelFloat {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(-10px, -5px); }
+            50% { transform: translate(0, -10px); }
+            75% { transform: translate(10px, -5px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: minmax(420px, 560px) minmax(0, 1fr);
+            align-items: stretch;
+            align-content: center;
+            gap: 64px;
+            max-width: 1680px;
+            margin: 0 auto;
+            padding: 48px 40px;
+            min-height: 100vh;
+            position: relative;
+            z-index: 10;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            right: -50px;
+            bottom: -50px;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(1px);
+            border-radius: 20px;
+            z-index: -1;
+        }
+
+        /* 主计时器区域 */
+        .main-timer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            margin-bottom: 0;
+            position: relative;
+        }
+
+        .main-timer::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(2px);
+            border-radius: 30px;
+            z-index: -1;
+        }
+
+        .app-title {
+            font-size: 2.2rem;
+            margin-bottom: 32px;
+            padding: 0 72px;
+            text-shadow: var(--pixel-shadow-large);
+            animation: float 3s ease-in-out infinite, glow 2s ease-in-out infinite alternate;
+            background: linear-gradient(45deg, var(--primary-red), var(--primary-yellow), var(--primary-red));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        .work-mode .app-title {
+            background: linear-gradient(45deg, var(--pure-white), var(--bright-yellow), var(--pure-white));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-8px) rotate(1deg); }
+            50% { transform: translateY(-15px) rotate(0deg); }
+            75% { transform: translateY(-8px) rotate(-1deg); }
+        }
+
+        @keyframes glow {
+            0% { filter: drop-shadow(0 0 10px rgba(255, 45, 45, 0.3)); }
+            100% { filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6)); }
+        }
+
+        .current-task-display {
+            display: none;
+            max-width: 760px;
+            margin: 0 20px 44px;
+            padding: 18px 36px;
+            border: 4px solid var(--dark-gray);
+            background: var(--primary-yellow);
+            box-shadow: var(--pixel-shadow);
+            color: var(--dark-gray);
+            font-size: 1rem;
+            letter-spacing: 1px;
+            text-align: center;
+            line-height: 1.7;
+            word-break: break-word;
+        }
+
+        .current-task-display.is-visible {
+            display: block;
+        }
+
+        .work-mode .current-task-display {
+            background: var(--pure-white);
+            border-color: var(--pure-white);
+            color: var(--primary-red);
+            box-shadow: var(--glow-white);
+        }
+
+        .timer-wrapper {
+            position: relative;
+            margin-bottom: 48px;
+        }
+
+        .timer-display {
+            font-family: 'Orbitron', 'Press Start 2P', monospace;
+            font-size: 6.6rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--pure-white) 0%, var(--light-gray) 100%);
+            color: var(--primary-red);
+            padding: 56px 84px;
+            border-radius: 0;
+            box-shadow: 
+                var(--pixel-shadow-large),
+                inset 0 0 30px rgba(255, 45, 45, 0.1),
+                0 0 30px rgba(255, 45, 45, 0.3);
+            text-shadow: 
+                2px 2px 0px rgba(0,0,0,0.3),
+                0 0 10px rgba(255, 45, 45, 0.5);
+            letter-spacing: 16px;
+            border: 5px solid var(--dark-gray);
+            position: relative;
+            overflow: hidden;
+            animation: timerGlow 3s ease-in-out infinite alternate;
+        }
+
+        .timer-display::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 10px,
+                    rgba(255, 255, 255, 0.05) 10px,
+                    rgba(255, 255, 255, 0.05) 20px
+                );
+            pointer-events: none;
+        }
+
+        .timer-display::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--primary-red), var(--primary-yellow), var(--primary-red));
+            background-size: 400% 400%;
+            z-index: -1;
+            animation: borderFlow 4s ease-in-out infinite;
+        }
+
+        @keyframes timerGlow {
+            0% { 
+                box-shadow: 
+                    var(--pixel-shadow-large),
+                    inset 0 0 30px rgba(255, 45, 45, 0.1),
+                    0 0 30px rgba(255, 45, 45, 0.3);
+            }
+            100% { 
+                box-shadow: 
+                    var(--pixel-shadow-large),
+                    inset 0 0 40px rgba(255, 45, 45, 0.2),
+                    0 0 50px rgba(255, 45, 45, 0.5);
+            }
+        }
+
+        @keyframes borderFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .work-mode .timer-display {
+            background: linear-gradient(135deg, var(--primary-yellow) 0%, var(--bright-yellow) 100%);
+            color: var(--dark-gray);
+            border-color: var(--pure-white);
+            box-shadow: 
+                var(--pixel-shadow-large),
+                inset 0 0 30px rgba(255, 215, 0, 0.1),
+                0 0 40px rgba(255, 215, 0, 0.4);
+            text-shadow: 
+                2px 2px 0px rgba(0,0,0,0.3),
+                0 0 10px rgba(255, 215, 0, 0.6);
+        }
+
+        .work-mode .timer-display::after {
+            background: linear-gradient(45deg, var(--pure-white), var(--bright-yellow), var(--pure-white));
+            background-size: 400% 400%;
+        }
+
+        .short-break-mode .timer-display,
+        .long-break-mode .timer-display {
+            background: linear-gradient(135deg, var(--pure-white) 0%, var(--light-gray) 50%, var(--pure-white) 100%);
+            color: var(--primary-red);
+            border-color: var(--dark-gray);
+            box-shadow: 
+                var(--pixel-shadow-large),
+                inset 0 0 30px rgba(255, 215, 0, 0.1),
+                0 0 40px rgba(255, 215, 0, 0.4);
+            text-shadow: 
+                2px 2px 0px rgba(0,0,0,0.3),
+                0 0 10px rgba(255, 45, 45, 0.5);
+        }
+
+        .short-break-mode .timer-display::after,
+        .long-break-mode .timer-display::after {
+            background: linear-gradient(45deg, var(--primary-yellow), var(--primary-red), var(--primary-yellow));
+            background-size: 400% 400%;
+        }
+
+        /* 精美控制按钮 */
+        .controls {
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .pixel-btn {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1.15rem;
+            font-weight: bold;
+            padding: 22px 42px;
+            border: none;
+            border-radius: 0;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--pixel-shadow-large);
+            position: relative;
+            border: 4px solid var(--dark-gray);
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .pixel-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+            z-index: -1;
+        }
+
+        .pixel-btn:hover::before {
+            left: 100%;
+        }
+
+        .pixel-btn:hover {
+            transform: translate(3px, 3px) scale(1.05);
+            box-shadow: 3px 3px 0px rgba(0,0,0,0.4);
+        }
+
+        .pixel-btn:active {
+            transform: translate(6px, 6px) scale(0.98);
+            box-shadow: 1px 1px 0px rgba(0,0,0,0.3);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-red), var(--bright-red));
+            color: var(--pure-white);
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.3);
+            animation: primaryGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes primaryGlow {
+            0% { 
+                box-shadow: 
+                    var(--pixel-shadow-large),
+                    0 0 20px rgba(255, 45, 45, 0.3);
+            }
+            100% { 
+                box-shadow: 
+                    var(--pixel-shadow-large),
+                    0 0 30px rgba(255, 45, 45, 0.5);
+            }
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--primary-yellow), var(--bright-yellow));
+            color: var(--dark-gray);
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.5);
+            animation: secondaryGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes secondaryGlow {
+            0% { 
+                box-shadow: 
+                    var(--pixel-shadow-large),
+                    0 0 15px rgba(255, 215, 0, 0.3);
+            }
+            100% { 
+                box-shadow: 
+                    var(--pixel-shadow-large),
+                    0 0 25px rgba(255, 215, 0, 0.5);
+            }
+        }
+
+        .btn-tertiary {
+            background: linear-gradient(135deg, var(--pure-white), var(--light-gray));
+            color: var(--dark-gray);
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.8);
+            animation: tertiaryGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes tertiaryGlow {
+            0% { 
+                box-shadow: 
+                    var(--pixel-shadow-large),
+                    0 0 10px rgba(255, 255, 255, 0.3);
+            }
+            100% { 
+                box-shadow: 
+                    var(--pixel-shadow-large),
+                    0 0 20px rgba(255, 255, 255, 0.5);
+            }
+        }
+
+        .work-mode .btn-primary {
+            background: linear-gradient(135deg, var(--primary-yellow), var(--bright-yellow));
+            color: var(--dark-gray);
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.5);
+        }
+
+        .work-mode .btn-secondary {
+            background: linear-gradient(135deg, var(--pure-white), var(--light-gray));
+            color: var(--primary-red);
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.8);
+        }
+
+        .work-mode .btn-tertiary {
+            background: linear-gradient(135deg, var(--light-gray), var(--pure-white));
+            color: var(--dark-gray);
+            border-color: var(--pure-white);
+        }
+
+        /* 精美设置按钮 */
+        .settings-trigger {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 46px;
+            height: 46px;
+            background: linear-gradient(135deg, var(--primary-yellow), var(--bright-yellow));
+            border: 3px solid var(--dark-gray);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            box-shadow: 
+                var(--pixel-shadow-large),
+                0 0 20px rgba(255, 215, 0, 0.4);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            animation: settingsPulse 3s ease-in-out infinite;
+            overflow: hidden;
+        }
+
+        .settings-trigger::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .settings-trigger:hover::before {
+            opacity: 1;
+        }
+
+        .settings-trigger:hover {
+            transform: rotate(180deg) scale(1.1);
+            box-shadow: 
+                var(--pixel-shadow-large),
+                0 0 30px rgba(255, 215, 0, 0.6);
+        }
+
+        @keyframes settingsPulse {
+            0%, 100% { 
+                box-shadow: 
+                    var(--pixel-shadow-large),
+                    0 0 20px rgba(255, 215, 0, 0.4);
+            }
+            50% { 
+                box-shadow: 
+                    var(--pixel-shadow-large),
+                    0 0 35px rgba(255, 215, 0, 0.6);
+            }
+        }
+
+        .work-mode .settings-trigger {
+            background: linear-gradient(135deg, var(--pure-white), var(--light-gray));
+            color: var(--primary-red);
+            border-color: var(--pure-white);
+            box-shadow: 
+                var(--pixel-shadow-large),
+                0 0 20px rgba(255, 255, 255, 0.6);
+        }
+
+        .work-mode .settings-trigger:hover {
+            box-shadow: 
+                var(--pixel-shadow-large),
+                0 0 40px rgba(255, 255, 255, 0.8);
+        }
+
+        /* 任务区域 */
+        .task-section {
+            width: 100%;
+            max-width: none;
+            display: flex;
+            flex-direction: column;
+            background: 
+                linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,248,248,0.95) 100%);
+            backdrop-filter: blur(20px);
+            border: 5px solid var(--dark-gray);
+            box-shadow: 
+                var(--pixel-shadow-large),
+                0 0 30px rgba(0,0,0,0.1),
+                inset 0 0 30px rgba(255,255,255,0.1);
+            padding: 36px;
+            color: var(--dark-gray);
+            position: relative;
+            overflow: hidden;
+            min-height: 0;
+        }
+
+        #taskList {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+        }
+
+        .task-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent 0px,
+                transparent 20px,
+                rgba(255,215,0,0.02) 20px,
+                rgba(255,215,0,0.02) 22px
+            );
+            pointer-events: none;
+        }
+
+        .task-section::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--primary-yellow), var(--primary-red), var(--primary-yellow));
+            background-size: 400% 400%;
+            z-index: -1;
+            animation: taskBorder 6s ease-in-out infinite;
+        }
+
+        @keyframes taskBorder {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .work-mode .task-section {
+            background: 
+                linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.95) 100%);
+            border-color: var(--pure-white);
+            box-shadow: 
+                var(--pixel-shadow-large),
+                0 0 40px rgba(255,255,255,0.3),
+                inset 0 0 30px rgba(255,215,0,0.1);
+        }
+
+        .work-mode .task-section::after {
+            background: linear-gradient(45deg, var(--pure-white), var(--bright-yellow), var(--pure-white));
+            background-size: 400% 400%;
+        }
+
+        .section-header {
+            font-size: 1.35rem;
+            margin-bottom: 28px;
+            color: var(--primary-red);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 3px solid var(--primary-yellow);
+            padding-bottom: 12px;
+            position: relative;
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.5);
+            animation: headerGlow 2s ease-in-out infinite alternate;
+        }
+
+        .section-header::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 40%;
+            height: 3px;
+            background: var(--primary-red);
+            animation: headerUnderline 3s ease-in-out infinite;
+        }
+
+        @keyframes headerGlow {
+            0% { text-shadow: 1px 1px 0px rgba(255,255,255,0.5); }
+            100% { text-shadow: 2px 2px 4px rgba(255,45,45,0.3); }
+        }
+
+        @keyframes headerUnderline {
+            0%, 100% { width: 40%; }
+            50% { width: 80%; }
+        }
+
+        /* 任务列表 */
+        .task-input-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .pixel-input {
+            font-family: 'Press Start 2P', cursive;
+            flex: 1;
+            padding: 16px;
+            border: 3px solid var(--dark-gray);
+            background: var(--pure-white);
+            font-size: 0.85rem;
+            color: var(--dark-gray);
+        }
+
+        .pixel-input:focus {
+            outline: none;
+            border-color: var(--primary-red);
+            box-shadow: 0 0 0 2px var(--primary-yellow);
+        }
+
+        .task-item {
+            background: var(--light-gray);
+            border: 2px solid var(--dark-gray);
+            padding: 18px;
+            margin-bottom: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .task-item.current {
+            background: var(--primary-yellow);
+            border-color: var(--primary-red);
+            box-shadow: var(--pixel-shadow-small);
+        }
+
+        .task-item.completed {
+            opacity: 0.55;
+            cursor: default;
+        }
+
+        .task-item.completed .task-text {
+            text-decoration: line-through;
+        }
+
+        .task-text {
+            font-size: 0.85rem;
+            flex: 1;
+            text-align: left;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .mini-btn {
+            width: 36px;
+            height: 36px;
+            border: 2px solid var(--dark-gray);
+            background: var(--pure-white);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+        }
+
+        .mini-btn:hover {
+            background: var(--primary-yellow);
+        }
+
+        .app-toast {
+            position: fixed;
+            top: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+            align-items: center;
+            gap: 16px;
+            z-index: 2000;
+            background: var(--primary-yellow);
+            color: var(--dark-gray);
+            border: 4px solid var(--dark-gray);
+            box-shadow: var(--pixel-shadow-large);
+            padding: 16px 18px 16px 24px;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            line-height: 1.6;
+            max-width: calc(100vw - 40px);
+        }
+
+        .app-toast.is-visible {
+            display: flex;
+            animation: toastIn 0.2s ease-out;
+        }
+
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        .work-mode .app-toast {
+            background: var(--pure-white);
+            border-color: var(--pure-white);
+            color: var(--primary-red);
+        }
+
+        /* 设置模态框 */
+        .settings-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .settings-panel {
+            background: var(--pure-white);
+            border: 4px solid var(--dark-gray);
+            box-shadow: 8px 8px 0px rgba(0,0,0,0.4);
+            padding: 40px;
+            width: 90%;
+            max-width: 600px;
+            color: var(--dark-gray);
+        }
+
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .setting-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .setting-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .number-input {
+            width: 80px;
+            padding: 8px;
+            border: 2px solid var(--dark-gray);
+            background: var(--light-gray);
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.7rem;
+            text-align: center;
+        }
+
+        .checkbox-pixel {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--dark-gray);
+            background: var(--pure-white);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .checkbox-pixel.checked {
+            background: var(--primary-red);
+        }
+
+        .checkbox-pixel.checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--pure-white);
+            font-size: 0.8rem;
+        }
+
+        /* 精美响应式设计 */
+        @media (max-width: 1280px) {
+            .container {
+                grid-template-columns: minmax(360px, 460px) minmax(0, 1fr);
+                gap: 40px;
+                padding: 36px 24px;
+            }
+
+            .timer-display {
+                font-size: 5.2rem;
+                padding: 44px 56px;
+                letter-spacing: 12px;
+            }
+
+            .app-title {
+                font-size: 1.9rem;
+                padding: 0 64px;
+            }
+        }
+
+        @media (max-width: 860px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 28px;
+                max-width: 720px;
+            }
+
+            .task-section {
+                order: 2;
+            }
+
+            .main-timer {
+                order: 1;
+                min-height: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .app-title {
+                font-size: 1.6rem;
+                margin-bottom: 22px;
+                padding: 0 56px;
+            }
+
+            .current-task-display {
+                font-size: 0.65rem;
+                padding: 12px 18px;
+                margin-bottom: 28px;
+            }
+
+            .timer-display {
+                font-size: 3.6rem;
+                padding: 32px 28px;
+                letter-spacing: 8px;
+            }
+
+            .controls {
+                gap: 20px;
+            }
+
+            .pixel-btn {
+                font-size: 0.9rem;
+                padding: 15px 28px;
+            }
+
+            .container {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .app-title {
+                font-size: 1.4rem;
+                margin-bottom: 25px;
+                padding: 0 52px;
+            }
+
+            .timer-display {
+                font-size: 3.5rem;
+                padding: 30px 40px;
+                letter-spacing: 6px;
+            }
+
+            .pixel-btn {
+                font-size: 0.8rem;
+                padding: 12px 20px;
+                letter-spacing: 1px;
+            }
+
+            .controls {
+                gap: 15px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .stat-card {
+                padding: 15px;
+            }
+
+            .stat-number {
+                font-size: 1.5rem;
+            }
+
+            .container {
+                padding: 15px;
+                gap: 25px;
+            }
+
+            .settings-trigger {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+                top: 14px;
+                right: 14px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .timer-display {
+                font-size: 2.8rem;
+                padding: 25px 30px;
+                letter-spacing: 4px;
+            }
+
+            .pixel-btn {
+                font-size: 0.7rem;
+                padding: 10px 15px;
+            }
+
+            .app-title {
+                font-size: 1.4rem;
+            }
+        }
+
+        /* 精美动画效果 */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .timer-complete {
+            animation: 
+                pulse 0.5s ease-in-out 3,
+                completionGlow 2s ease-in-out;
+        }
+
+        @keyframes completionGlow {
+            0% { 
+                box-shadow: 
+                    var(--pixel-shadow-large),
+                    0 0 30px currentColor;
+            }
+            50% { 
+                box-shadow: 
+                    var(--pixel-shadow-large),
+                    0 0 60px currentColor,
+                    0 0 100px rgba(255, 215, 0, 0.5);
+            }
+            100% { 
+                box-shadow: 
+                    var(--pixel-shadow-large),
+                    0 0 30px currentColor;
+            }
+        }
+
+        /* 闪烁特效 */
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--bright-yellow);
+            animation: sparkle 1s ease-in-out infinite;
+        }
+
+        .sparkle:nth-child(1) { top: 20%; left: 20%; animation-delay: 0s; }
+        .sparkle:nth-child(2) { top: 20%; right: 20%; animation-delay: 0.2s; }
+        .sparkle:nth-child(3) { bottom: 20%; left: 20%; animation-delay: 0.4s; }
+        .sparkle:nth-child(4) { bottom: 20%; right: 20%; animation-delay: 0.6s; }
+        .sparkle:nth-child(5) { top: 50%; left: 10%; animation-delay: 0.1s; }
+        .sparkle:nth-child(6) { top: 50%; right: 10%; animation-delay: 0.3s; }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+
+        /* 像素装饰点 */
+        .pixel-decoration {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: currentColor;
+            opacity: 0.3;
+        }
+/* ═══════════════════════════════════════════════════
+   SIDE PANEL OVERRIDES (.side-panel prefixed)
+   ═══════════════════════════════════════════════════ */
+
+/* Fit panel to viewport, prevent scroll */
+.side-panel {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Hide unused original layout classes */
+.side-panel .app-title,
+.side-panel .container,
+.side-panel .task-section,
+.side-panel .main-timer,
+.side-panel .settings-trigger { display: none; }
+
+/* --- Top Bar --- */
+.side-panel .top-bar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    padding: 10px 12px;
+    position: relative;
+    z-index: 10;
+}
+
+.side-panel .top-bar-left {
+    display: flex;
+}
+
+.side-panel .top-bar-center {
+    display: flex;
+    justify-content: center;
+}
+
+.side-panel .top-bar-right {
+    display: flex;
+    gap: 6px;
+}
+
+.side-panel .settings-corner {
+    position: fixed;
+    top: 10px;
+    right: 12px;
+    z-index: 20;
+}
+
+.side-panel .top-bar-btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: transparent;
+    font-size: 1.05rem;
+    color: inherit;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.1s, box-shadow 0.1s;
+    padding: 0;
+}
+
+.work-mode .top-bar-btn {
+    color: var(--pure-white);
+}
+
+.side-panel .top-bar-btn:hover {
+    transform: translate(1px, 1px);
+    box-shadow: 2px 2px 0px rgba(0,0,0,0.25);
+}
+
+.side-panel .top-bar-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: none;
+}
+
+/* --- Mode Label --- */
+.side-panel .mode-label {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 6px 12px;
+    border: none;
+    box-shadow: none;
+    text-align: center;
+}
+
+.work-mode .mode-label {
+    color: var(--pure-white);
+}
+
+.short-break-mode .mode-label,
+.long-break-mode .mode-label {
+    color: var(--dark-gray);
+}
+
+/* --- Timer Area --- */
+.side-panel .timer-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    padding: 32px 16px 36px;
+    position: relative;
+    z-index: 10;
+}
+
+.side-panel .current-task-display {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.6rem;
+    color: inherit;
+    opacity: 0.85;
+    text-align: center;
+    margin-bottom: 24px;
+    min-height: 22px;
+    line-height: 1.6;
+    max-width: 100%;
+    word-wrap: break-word;
+    display: none;
+    padding: 6px 10px;
+    border: 1px dashed rgba(128,128,128,0.3);
+    border-radius: 0;
+}
+
+.side-panel .current-task-display.is-visible {
+    display: block;
+}
+
+/* Timer display - override original with higher specificity */
+.side-panel .timer-wrapper {
+    position: relative;
+    margin-bottom: 22px;
+}
+
+.side-panel .timer-display {
+    font-family: 'Orbitron', 'Press Start 2P', monospace;
+    font-size: 4rem !important;
+    font-weight: 900;
+    padding: 24px 32px !important;
+    border: 4px solid currentColor !important;
+    box-shadow: var(--pixel-shadow) !important;
+    background: rgba(255,255,255,0.12) !important;
+    text-align: center;
+    letter-spacing: 6px !important;
+    position: relative;
+    animation: none !important;
+    text-shadow: none !important;
+    border-radius: 0 !important;
+    color: inherit !important;
+}
+
+/* Kill original timer pseudo-elements in side panel */
+.side-panel .timer-display::before,
+.side-panel .timer-display::after {
+    display: none !important;
+}
+
+/* Timer idle state - muted, receding */
+.side-panel .timer-display {
+    opacity: 0.55;
+    filter: brightness(0.85);
+    transition: opacity 0.3s, filter 0.3s, box-shadow 0.3s, background 0.3s, border-color 0.3s;
+}
+
+/* Timer running state - bright, strong glow */
+.side-panel .timer-display.is-running {
+    opacity: 1 !important;
+    filter: brightness(1.15) !important;
+    box-shadow: var(--pixel-shadow), 0 0 30px rgba(255,45,45,0.5), 0 0 60px rgba(255,45,45,0.2) !important;
+}
+
+/* Mode-specific timer overrides */
+.work-mode .side-panel .timer-display,
+.side-panel.work-mode .timer-display {
+    color: var(--pure-white) !important;
+    border-color: rgba(255,255,255,0.6) !important;
+    background: rgba(255,255,255,0.04) !important;
+    border-color: rgba(255,255,255,0.35) !important;
+}
+
+.work-mode .side-panel .timer-display.is-running,
+.side-panel.work-mode .timer-display.is-running {
+    background: rgba(255,255,255,0.25) !important;
+    border-color: var(--pure-white) !important;
+    box-shadow: var(--pixel-shadow), 0 0 40px rgba(255,255,255,0.5), 0 0 80px rgba(255,255,255,0.2) !important;
+}
+
+.short-break-mode .side-panel .timer-display,
+.long-break-mode .side-panel .timer-display,
+.side-panel.short-break-mode .timer-display,
+.side-panel.long-break-mode .timer-display {
+    color: var(--dark-gray) !important;
+    border-color: rgba(0,0,0,0.5) !important;
+    background: rgba(255,255,255,0.12) !important;
+    border-color: rgba(0,0,0,0.35) !important;
+}
+
+.short-break-mode .side-panel .timer-display.is-running,
+.long-break-mode .side-panel .timer-display.is-running,
+.side-panel.short-break-mode .timer-display.is-running,
+.side-panel.long-break-mode .timer-display.is-running {
+    background: rgba(255,255,255,0.55) !important;
+    border-color: var(--dark-gray) !important;
+    box-shadow: var(--pixel-shadow), 0 0 40px rgba(255,215,0,0.55), 0 0 80px rgba(255,215,0,0.2) !important;
+}
+
+/* --- Today Stats --- */
+.side-panel .today-stats {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.52rem;
+    color: inherit;
+    opacity: 0.55;
+    text-align: center;
+    padding: 12px 16px;
+    line-height: 1.8;
+    min-height: 18px;
+    width: 100%;
+    border-top: 1px solid rgba(128,128,128,0.15);
+    position: relative;
+    z-index: 10;
+}
+
+.work-mode .side-panel .today-stats {
+    border-top-color: rgba(255,255,255,0.12);
+    opacity: 0.5;
+}
+
+.short-break-mode .side-panel .today-stats,
+.long-break-mode .side-panel .today-stats {
+    border-top-color: rgba(0,0,0,0.1);
+    opacity: 0.5;
+}
+
+/* --- Controls --- */
+.side-panel .controls {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 4px;
+}
+
+.side-panel .controls .pixel-btn {
+    font-size: 0.68rem;
+    padding: 14px 26px;
+    letter-spacing: 2px;
+}
+
+.side-panel .controls .btn-task-open {
+    font-size: 0.85rem;
+    padding: 14px 18px;
+    letter-spacing: 0;
+    min-width: 0;
+}
+
+
+
+/* --- Task Panel Overlay --- */
+.side-panel .task-panel-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+}
+
+.side-panel .task-panel-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* --- Task Panel (slide-in from left) --- */
+.side-panel .task-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 200;
+    background: var(--pure-white);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(-100%);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 4px 0 20px rgba(0,0,0,0.3);
+    overflow: hidden;
+}
+
+.work-mode .side-panel .task-panel {
+    background: var(--primary-red);
+    color: var(--pure-white);
+}
+
+.short-break-mode .side-panel .task-panel {
+    background: var(--primary-yellow);
+    color: var(--dark-gray);
+}
+
+.long-break-mode .side-panel .task-panel {
+    background: var(--secondary-yellow);
+    color: var(--dark-gray);
+}
+
+.side-panel .task-panel.open {
+    transform: translateX(0);
+}
+
+.side-panel .task-panel-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-bottom: 2px solid rgba(0,0,0,0.1);
+}
+
+.work-mode .side-panel .task-panel-header {
+    border-bottom-color: rgba(255,255,255,0.2);
+}
+
+.side-panel .section-header-text {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+}
+
+/* --- Task Input --- */
+.side-panel .task-input-group {
+    display: flex;
+    gap: 8px;
+    padding: 10px 12px;
+    border-bottom: 2px solid rgba(0,0,0,0.1);
+}
+
+.work-mode .side-panel .task-input-group {
+    border-bottom-color: rgba(255,255,255,0.2);
+}
+
+.side-panel .pixel-input {
+    flex: 1;
+    padding: 10px 12px;
+    border: 2px solid var(--dark-gray);
+    background: rgba(255,255,255,0.5);
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.55rem;
+    box-shadow: var(--pixel-shadow-small);
+}
+
+.work-mode .side-panel .pixel-input {
+    background: rgba(255,255,255,0.12);
+    color: var(--pure-white);
+    border-color: rgba(255,255,255,0.4);
+}
+
+.work-mode .side-panel .pixel-input::placeholder {
+    color: rgba(255,255,255,0.4);
+}
+
+/* --- Task List --- */
+.side-panel .task-list-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 12px;
+}
+
+.side-panel .task-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    border: 2px solid var(--dark-gray);
+    background: rgba(255,255,255,0.4);
+    box-shadow: var(--pixel-shadow-small);
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.55rem;
+    line-height: 1.5;
+}
+
+.work-mode .side-panel .task-item {
+    border-color: rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.08);
+}
+
+.side-panel .task-item:hover {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0px rgba(0,0,0,0.25);
+}
+
+.side-panel .task-item.current {
+    border-color: var(--primary-red);
+    background: rgba(255,45,45,0.08);
+}
+
+.work-mode .side-panel .task-item.current {
+    border-color: var(--bright-yellow);
+    background: rgba(255,215,0,0.15);
+}
+
+.side-panel .task-item.completed {
+    opacity: 0.45;
+    text-decoration: line-through;
+    cursor: default;
+}
+
+.side-panel .task-item .task-text {
+    flex: 1;
+    word-wrap: break-word;
+    margin-right: 8px;
+}
+
+.side-panel .task-actions {
+    display: flex;
+    gap: 3px;
+    flex-shrink: 0;
+}
+
+.side-panel .task-btn {
+    width: 22px;
+    height: 22px;
+    border: 1px solid var(--dark-gray);
+    background: var(--pure-white);
+    font-size: 0.55rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    box-shadow: 1px 1px 0px rgba(0,0,0,0.2);
+    transition: transform 0.1s, background 0.15s, color 0.15s;
+}
+
+.work-mode .side-panel .task-btn {
+    background: rgba(255,255,255,0.15);
+    border-color: rgba(255,255,255,0.35);
+    color: var(--pure-white);
+}
+
+.side-panel .task-btn:hover {
+    transform: translate(1px, 1px);
+    box-shadow: none;
+}
+
+.side-panel .task-done-btn:hover {
+    background: #4CAF50 !important;
+    color: white !important;
+    border-color: #4CAF50 !important;
+}
+
+.side-panel .task-edit-btn:hover {
+    background: #2196F3 !important;
+    color: white !important;
+    border-color: #2196F3 !important;
+}
+
+.side-panel .task-del-btn:hover {
+    background: var(--primary-red) !important;
+    color: white !important;
+    border-color: var(--primary-red) !important;
+}
+
+/* --- Clear Completed --- */
+.side-panel .clear-completed-btn {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 8px;
+    border: 1px dashed var(--dark-gray);
+    background: transparent;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.48rem;
+    cursor: pointer;
+    color: inherit;
+    opacity: 0.55;
+    transition: opacity 0.2s;
+}
+
+.work-mode .side-panel .clear-completed-btn {
+    border-color: rgba(255,255,255,0.35);
+    color: var(--pure-white);
+}
+
+.side-panel .clear-completed-btn:hover {
+    opacity: 1;
+}
+
+/* --- Settings Panel (compact for side panel) --- */
+.side-panel .settings-panel {
+    padding: 20px 18px;
+    width: 92%;
+    max-width: 340px;
+}
+
+.side-panel .setting-row {
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+}
+
+.side-panel .setting-label {
+    font-size: 0.6rem;
+}
+
+.side-panel .number-input {
+    width: 56px;
+    padding: 6px;
+    font-size: 0.6rem;
+}
+
+.side-panel .checkbox-pixel {
+    width: 18px;
+    height: 18px;
+}
+
+/* --- Toast --- */
+.side-panel .app-toast {
+    position: fixed;
+    top: 48px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 500;
+    background: var(--dark-gray);
+    color: var(--pure-white);
+    padding: 10px 16px;
+    border: 2px solid var(--pure-white);
+    box-shadow: var(--pixel-shadow);
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.5rem;
+    display: none;
+    align-items: center;
+    gap: 10px;
+    max-width: 90%;
+    white-space: nowrap;
+}
+
+.side-panel .app-toast.is-visible {
+    display: flex;
+}
+
+.side-panel .mini-btn {
+    font-size: 0.55rem;
+    padding: 2px 6px;
+}
+
+
