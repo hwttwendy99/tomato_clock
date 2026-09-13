@@ -1,69 +1,107 @@
 # 🍅 TOMATO CLOCK — Pixel Pomodoro Timer
 
-[中文](README.md) · **English**
+[中文](README_CN.md) · **English**
 
-> A pixel-art style Pomodoro timer Chrome extension.
-> Built from scratch by a product manager using AI coding agents.
-> Designed for focused learning and personal deep work — every new tab is a chance to lock in.
-
-🔗 [Live Demo](https://你的用户名.github.io/tomato_clock) · 🧩 [Chrome Web Store](#)
+> A pixel-art Pomodoro timer for focused online learning.
+> Built with AI coding agents — product thinking meets vibe coding.
 
 ---
 
-## 🎯 Why I Built This
+## 🎯 Why
 
-After work, I wanted to systematically learn new things, but phone notifications, social media, and short videos kept breaking my focus. Existing Pomodoro timers were either too complex or not visually appealing. As a product manager with vibe coding experience, I decided to build my own.
+Online courses, coding tutorials, reading long-form articles — none of them work without sustained focus. But between notifications, social feeds, and the endless scroll, staying locked in is hard.
 
-This is a **PM × AI collaboration** — product decisions by me, code by AI coding agents.
+TOMATO CLOCK is made for that exact problem. Open it, pick what you're learning, and go. It handles the rhythm (Focus → Break → Focus) so you don't have to think about anything except the material in front of you.
 
 ---
 
-## ✨ Highlights
+## 📦 Two Ways to Use
 
-- **Pixel Retro Aesthetic** — Press Start 2P font + pixel shadows + dynamic gradient backgrounds
-- **New Tab as Entry Point** — Every new tab is an opportunity to focus. Zero friction.
-- **Auto Mode Switching** — Focus → Short Break → Focus → Long Break, hands-free
-- **Single-Task Focus** — One thing at a time. No multitasking illusion.
-- **Background Timer** — Timer keeps running even when you close the tab. Notifications + badge keep you informed.
-- **Zero Dependencies, Fully Offline** — Single HTML file runs standalone. Extension works without internet.
+### HTML Demo
+
+A single self-contained HTML file. Open it in any browser — no install, no dependencies. Full Pomodoro timer with task management, mode switching, and today's stats. Perfect for trying it out or embedding anywhere.
+
+### Chrome Extension
+
+A Side Panel that lives in your browser toolbar. Click the 🍅 icon, and the timer slides out from the right. Close it anytime — the timer keeps running in the background. Notifications and a badge on the icon tell you when a session ends. Built with Manifest V3, Service Worker, and the Side Panel API.
+
+---
+
+## ✨ Features
+
+- **Side Panel, not a tab** — Opens from the toolbar icon. Timer persists when closed.
+- **Self-contained HTML demo** — One file, open and go. Works offline.
+- **Pixel retro style** — Press Start 2P font, pixel shadows, dynamic gradients. Red for focus, gold for breaks.
+- **Auto mode switching** — Focus → Short Break → Focus → Long Break. No manual toggling.
+- **Single-task focus** — One active task at a time. Switch only when idle or paused.
+- **Quick-start** — No task yet? Tap START to auto-create a 🍅 task. Repeat for 🍅🍅, 🍅🍅🍅...
+- **Today's stats** — Focus sessions and minutes logged today, shown at a glance.
+- **Timer glow states** — Dim when idle, bright with a glow while running. You always know if you're on the clock.
+- **Offline & zero dependencies** — Demo runs without internet. Extension needs no network for core features.
 
 ---
 
 ## 🚀 Quick Start
 
-### Live Demo
+### HTML Demo
 
-Visit [GitHub Pages Demo](https://你的用户名.github.io/tomato_clock)
+Open `index.html` in any browser.
 
 ### Chrome Extension
 
 1. Clone this repo
-2. Open Chrome, go to `chrome://extensions/`
-3. Enable "Developer mode"
-4. Click "Load unpacked" and select the `extension/` folder
-5. Every new tab is now your focus session
+2. Chrome → `chrome://extensions/` → Enable Developer mode
+3. **Load unpacked** → select the `extension/` folder
+4. Click the 🍅 toolbar icon
 
 ---
 
-## 🤖 How I Built It with AI
+## 🧠 Design Decisions
 
-| Phase | My Role | AI's Role |
-|-------|---------|-----------|
-| Requirements | Define use case, feature scope, design direction | — |
-| Interaction Design | State machine for modes, task management flow | — |
-| Visual Design | Pixel style, color palette, typography | Generate CSS draft |
-| Implementation | Code review, logic validation, edge case testing | Generate HTML/CSS/JS |
-| Extension | Manifest definition, Service Worker architecture | Generate extension code |
-| Polish | Pixel-level UI tweaks, animations, responsive design | Iterate on feedback |
+**Side Panel vs. New Tab**  
+A new-tab override hijacks your browsing. A side panel is there when you need it, invisible when you don't.
+
+**No SKIP**  
+Skipping breaks the Pomodoro contract. Stop if you need to. Finish if you started.
+
+**Quick-create 🍅 tasks**  
+When you just want to start focusing, naming a task is friction. A 🍅 task says "I'm here to learn" with zero typing.
+
+---
+
+## 🤖 Built with AI
+
+| Phase | Human | AI Agent |
+|-------|-------|----------|
+| Product definition | Use case, feature scope, constraints | — |
+| Interaction design | State machine, task flow, edge cases | — |
+| Visual identity | Pixel aesthetic, color system, typography | CSS generation & iteration |
+| Implementation | Code review, logic validation, testing | HTML/CSS/JS generation |
+| Extension architecture | Manifest V3, Service Worker, Side Panel API | Scaffolding & API integration |
+| Polish | Pixel-level adjustments, responsive tuning | Rapid iteration |
 
 ---
 
 ## 🛠 Tech Stack
 
-- Vanilla HTML5 + CSS3 + JavaScript
-- Chrome Extension Manifest V3
-- Chrome Storage API / Service Worker / Notifications API
-- GitHub Pages
+- HTML5 + CSS3 + Vanilla JavaScript (Demo)
+- Chrome Extension Manifest V3 (Side Panel, Service Worker, Storage, Notifications)
+
+---
+
+## 📂 Structure
+
+```
+tomato_clock/
+├── index.html              # Live demo (self-contained)
+├── extension/              # Chrome extension
+│   ├── manifest.json
+│   ├── sidepanel.html / sidepanel.js
+│   ├── background.js       # Service Worker
+│   ├── styles.css
+│   └── icons/
+└── assets/
+```
 
 ---
 

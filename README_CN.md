@@ -1,92 +1,91 @@
 # 🍅 TOMATO CLOCK — 像素番茄时钟
 
-**中文** · [English](README.en.md)
+**中文** · [English](README_EN.md)
 
-> 一个像素复古风格的番茄时钟 Chrome 插件。
-> 由产品经理用 AI coding agent 从零独立构建。
-> 专为学习与个人沉淀场景设计——每次打开新标签页，都是一次专注的开始。
-
-🔗 [在线 Demo](https://你的用户名.github.io/tomato_clock) · 🧩 [Chrome Web Store](#)
+> 一个像素复古风格的番茄时钟，专为在线学习场景设计。
+> 借助 AI coding agent 构建——产品思维 × vibe coding。
 
 ---
 
 ## 🎯 为什么做这个
 
-下班后想系统学点东西，但手机、社交媒体、短视频不断分散注意力。市面上的番茄钟要么太复杂，要么不够好看——作为一个有 vibe coding 经验的产品经理，我决定自己做一个。
+上网课、看编程教程、读长文——没有持续的专注力，这些都很难完成。但手机通知、社交信息流、短视频总在分散注意力。
 
-这是一个 **PM × AI 协作** 的产物：产品设计我来定，代码由 AI coding agent 完成。
-
----
-
-## ✨ 产品亮点
-
-- **像素复古美学** — Press Start 2P 字体 + 像素阴影 + 动态渐变背景，减少视觉疲劳
-- **新标签页即入口** — 每次打开新标签页就是一次专注的起点，零摩擦启动
-- **三模式自动流转** — 专注 → 短休 → 专注 → 长休，无需手动切换
-- **单任务聚焦** — 一次只做一件事，避免多任务并行带来的伪效率
-- **后台计时不中断** — 关闭标签页计时继续，通过通知和 badge 提醒
-- **零依赖，完全离线** — 单文件 HTML 可独立运行，Chrome 插件无需网络
+TOMATO CLOCK 就是为这个场景做的。打开它，选好要学的内容，然后开始。它会自动处理节奏（专注 → 休息 → 专注），你只需要关注眼前的学习内容。
 
 ---
 
-## 📸 预览
+## 📦 两种使用方式
 
-![TOMATO CLOCK Demo](assets/demo.gif)
+### HTML Demo
+
+一个自包含的单文件 HTML。用任何浏览器打开即可使用——无需安装，零依赖。完整的番茄钟功能：任务管理、模式切换、今日统计。适合快速体验或嵌入到任何地方。
+
+### Chrome 插件
+
+一个驻留在浏览器工具栏的 Side Panel。点击 🍅 图标，计时器从右侧滑出。随时关闭——计时在后台继续。通知和图标上的 badge 会在计时结束时提醒你。基于 Manifest V3、Service Worker 和 Side Panel API 构建。
+
+---
+
+## ✨ 功能
+
+- **Side Panel 而非新标签页** — 工具栏图标打开，关闭后计时不中断
+- **自包含 HTML Demo** — 单文件即开即用，支持离线
+- **像素复古风格** — Press Start 2P 字体、像素阴影、动态渐变。专注红色，休息金色
+- **自动模式切换** — 专注 → 短休 → 专注 → 长休，无需手动操作
+- **单任务聚焦** — 一次只做一件事，空闲或暂停时才能切换
+- **一键快速开始** — 没有任务时点 START，自动创建 🍅 任务并计时。再点创建 🍅🍅
+- **今日统计** — 一眼看到今天完成了几个番茄、累计多少分钟
+- **计时器光晕** — 空闲时暗沉，计时中明亮带光晕，一眼看出状态
+- **离线零依赖** — Demo 无需网络，插件核心功能不需联网
 
 ---
 
 ## 🚀 快速开始
 
-### 在线体验
+### HTML Demo
 
-直接访问 [GitHub Pages Demo](https://你的用户名.github.io/tomato_clock)
+用浏览器打开 `index.html`。
 
-### Chrome 插件安装
+### Chrome 插件
 
-1. 下载本仓库
-2. 打开 Chrome，进入 `chrome://extensions/`
-3. 开启「开发者模式」
-4. 点击「加载已解压的扩展程序」，选择 `extension/` 目录
-5. 每次打开新标签页即可开始专注
-
----
-
-## 🧠 产品设计思路
-
-### 为什么是像素风格？
-
-在碎片化信息过载的时代，像素风格有一种「回到纯粹」的心理暗示。低饱和度的红色背景降低攻击性，像素阴影和等宽字体减少视觉噪音，让用户更快进入专注状态。
-
-### 为什么是单任务？
-
-番茄工作法的核心是「一次只做一件事」。市面上很多番茄钟允许并行多个任务，这其实违背了方法论的本意。这里强制单任务聚焦——如果你想切换任务，需要先完成或放弃当前任务。
-
-### 为什么是新标签页？
-
-学习场景下，打开浏览器通常是分心的起点（刷社交媒体、看视频）。把番茄钟放在新标签页，意味着每次这个动作都被拦截，变成一次「要不要先专注一会儿」的自我提醒。
+1. Clone 本仓库
+2. Chrome → `chrome://extensions/` → 开启开发者模式
+3. 「加载已解压的扩展程序」→ 选择 `extension/` 目录
+4. 点击工具栏 🍅 图标
 
 ---
 
-## 🤖 我是怎么用 AI 做的
+## 🧠 设计思路
 
-| 阶段 | 我的角色 | AI 的角色 |
-|------|---------|----------|
-| 需求定义 | 确定场景（学习/个人沉淀）、功能边界、设计风格 | — |
-| 交互设计 | 画出三模式状态机、任务管理流程 | — |
-| 视觉风格 | 选定像素风格、配色方案、字体体系 | 生成 CSS 初稿 |
-| 代码实现 | Code Review、逻辑校验、边界 case 测试 | 生成 HTML/CSS/JS |
-| Chrome 插件化 | 定义 manifest、Service Worker 架构 | 生成插件代码 |
-| 迭代打磨 | 像素级 UI 调整、动画细节、响应式适配 | 根据反馈修改 |
+**Side Panel vs 新标签页**  
+新标签页替换会劫持浏览行为。侧边栏需要时打开，不需要时消失。
+
+**为什么没有 SKIP**  
+跳过打破了番茄工作法的约定。要停就按 STOP，开始了就走完。
+
+**快速创建 🍅 任务**  
+只想开始专注时，输入任务名是一种摩擦。一个 🍅 任务零输入，直接开始。
+
+---
+
+## 🤖 AI 协作过程
+
+| 阶段 | 人的角色 | AI Agent 的角色 |
+|------|---------|---------------|
+| 产品定义 | 使用场景、功能边界、设计约束 | — |
+| 交互设计 | 状态机、任务流程、边界情况 | — |
+| 视觉风格 | 像素美学、配色体系、字体选择 | CSS 生成与迭代 |
+| 代码实现 | Code Review、逻辑校验、测试 | HTML/CSS/JS 生成 |
+| 插件架构 | Manifest V3、Service Worker、Side Panel API | 脚手架与 API 集成 |
+| 打磨调优 | 像素级调整、响应式适配 | 快速反馈迭代 |
 
 ---
 
 ## 🛠 技术栈
 
-- 纯前端，零框架依赖
-- HTML5 + CSS3 + Vanilla JavaScript
-- Chrome Extension Manifest V3
-- Chrome Storage API / Service Worker / Notifications API
-- GitHub Pages 部署
+- HTML5 + CSS3 + Vanilla JavaScript（Demo）
+- Chrome Extension Manifest V3（Side Panel、Service Worker、Storage、Notifications）
 
 ---
 
@@ -94,17 +93,14 @@
 
 ```
 tomato_clock/
-├── index.html          ← 在线 Demo（GitHub Pages）
-├── README.md
-├── extension/          ← Chrome 插件
+├── index.html              # 在线 Demo（自包含）
+├── extension/              # Chrome 插件
 │   ├── manifest.json
-│   ├── newtab.html
-│   ├── newtab.js
-│   ├── background.js
+│   ├── sidepanel.html / sidepanel.js
+│   ├── background.js       # Service Worker
 │   ├── styles.css
 │   └── icons/
 └── assets/
-    └── demo.gif
 ```
 
 ---
